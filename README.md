@@ -1,5 +1,5 @@
 # Video-Store
-Install hashedindex using:\
+Install hashedindex using:
 ```
 pip install hashedindex
 ```
