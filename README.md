@@ -1,2 +1,5 @@
 # Video-Store
-Video Store
+Install hashedindex using:\
+```
+pip install hashedindex
+```
