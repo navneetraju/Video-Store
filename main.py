@@ -1,32 +1,13 @@
-import hashedindex
-from collections import Counter
-
-class InvertedIndex:
-	def __init__(self):
-		self.index=hashedindex.HashedIndex()
-
-	def add_sport_action(self,sport,action,video):
-		self.index.add_term_occurrence(sport,video)
-		self.index.add_term_occurrence(action,video)
-
-	def get_sport(self,sport):
-		try:
-			res=dict(self.index.get_documents(sport))
-		except:
-			return None
-		return res
-
-	def get_sport_activity(self,sport,activity):
-		try:
-			term1 = dict(self.index.get_documents(sport))
-			term2 = dict(self.index.get_documents(activity))
-		except:
-			return None
-		final_dict = dict(term1.items() & term2.items()) 
-		return final_dict
+from inverted_index_base import *
+from clip_vid import *
 
 '''
-if __name__=="__main__":
+Use this file for integration of all modules and system testing.
+Each module has to be written in a seperate .py file and imported as above
+This helps code maintenance and debugging.
+'''
+
+if __name__ =="__main__":
 	index = InvertedIndex()
 	index.add_sport_action('cricket','bowling','video1.mp4')
 	index.add_sport_action('cricket','batting','video2.mp4')
@@ -49,4 +30,3 @@ if __name__=="__main__":
 
 	print('All RUGBY videos')
 	print(index.get_sport('rugby'))
-'''
