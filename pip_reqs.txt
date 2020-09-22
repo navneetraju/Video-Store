@@ -2,3 +2,4 @@ hashedindex
 imutils
 opencv-python
 moviepy
+nltk
