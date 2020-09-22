@@ -4,8 +4,9 @@ from nltk.stem import WordNetLemmatizer
 import nltk
 nltk.download('wordnet')
 nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 
-query= "videos of forehand serve  in tennis"
+query= "videos of batting in cricket"
 
 def get_Keywords(text):
 	'''
@@ -22,4 +23,6 @@ def get_Keywords(text):
 	nouns = [word for word, pos in tags if pos == 'NNP' or pos == 'NN' or pos == 'NNP' or pos == 'NNPS' or pos == 'VBG' or pos == 'VBD' or pos == 'VBP' or pos == 'VBP']
 	return nouns
 
+'''
 print(get_Keywords(query))
+'''
