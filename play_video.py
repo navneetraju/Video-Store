@@ -9,11 +9,11 @@ def play_video(videos):
 
     for video in videos:
         # create a video capture object
-        video_object = cv2.VideoCapture(video[0])
-
-        # find the fps of the selected video
-        fps=video_object.get(cv2.CAP_PROP_FPS)
-
+        try:
+            video_object = cv2.VideoCapture(video[0])
+        except:
+            return None
+            
         start_frame = video[1]
         end_frame = video[2]
 
