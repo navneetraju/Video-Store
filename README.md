@@ -3,6 +3,14 @@ Install pip dependenices using:
 ```
 pip install -r pip_reqs.txt
 ```
+### Usage
+- Ensure Videos folder in present in the repo folder
+- Ensure all videos,sub-directories,file names are exactly same as dataset
+- Ensure csv file present in the repo folder with the exact same name as dataset
+- .index , .csv and /Videos can be kept in repo even during commits - .gitignore will take care
+```
+python main.py
+```
 ### Repository Maintenance
 - Each functionality is to be written in seperate python modules
 - Each module has to be included in main.py

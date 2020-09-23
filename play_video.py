@@ -43,6 +43,3 @@ def play_video(videos):
         video_object.release()
         cv2.destroyAllWindows()
 
-if __name__ == "__main__":
-    videos = [('../dataset/sample/video1.mp4', 200, 400), ('../dataset/sample/video2.mp4', 100, 250), ('../dataset/sample/video3.mp4', 150, 320)]
-    play_video(videos)

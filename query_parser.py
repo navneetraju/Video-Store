@@ -2,9 +2,9 @@ from nltk.tag import pos_tag
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 import nltk
-nltk.download('wordnet')
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet',quiet=True)
+nltk.download('punkt',quiet=True)
+nltk.download('averaged_perceptron_tagger',quiet=True)
 
 query= "videos of batting in cricket"
 

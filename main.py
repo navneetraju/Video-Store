@@ -2,6 +2,10 @@ from inverted_index_base import *
 from clip_vid import *
 from query_parser import *
 from index_store import *
+from play_video import *
+from read_csv import *
+import os.path
+from os import path
 
 '''
 Use this file for integration of all modules and system testing.
@@ -10,25 +14,25 @@ This helps code maintenance and debugging.
 '''
 
 if __name__ =="__main__":
-	index = InvertedIndex()
-	index.add_sport_action('cricket','bowling','video1.mp4')
-	index.add_sport_action('cricket','batting','video2.mp4')
-	index.add_sport_action('cricket','fielding','video3.mp4')
-	index.add_sport_action('cricket','bowling','video4.mp4')
-	index.add_sport_action('swimming','freestyle','video5.mp4')
-	index.add_sport_action('swimming','breaststroke','video6.mp4')
-
-	print('All videos in which sport is CRICKET and action is BOWLING')
-	print(index.get_sport_activity('cricket','bowling'))
-
-	print('All CRICKET videos')
-	print(index.get_sport('cricket'))
-
-	print('All SWIMMING videos')
-	print(index.get_sport('swimming'))
-
-	print('All SWIMMING videos where person is doing freestyle')
-	print(index.get_sport_activity('swimming','freestyle'))
-
-	print('All RUGBY videos')
-	print(index.get_sport('rugby'))
+    if path.exists('sports.index'):
+        index=load_index('sports.index')
+    else:
+        read_from_csv('BoundingBoxes.csv')
+        index=load_index('sports.index')
+    query="query"
+    while query!='q':
+        query=input('Enter Query: ')
+        if query=='q':
+            exit()
+        keywords=get_Keywords(query)
+        print(keywords)
+        if len(keywords)==2:
+            retrDocs=index.get_sport_activity(keywords[0],keywords[1])
+        else:
+            retrDocs=index.get_sport(keywords[0])
+        if retrDocs ==None or len(retrDocs)==0:
+            print('NO VIDEOS FOUND!')
+            continue
+        retrDocs=list(retrDocs.keys())
+        #print(retrDocs)
+        play_video(retrDocs)

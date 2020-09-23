@@ -30,7 +30,7 @@ def load_index(pathname):
     with open('sports.index', 'rb') as sports_index_file:
         try:
             index = pickle.load(sports_index_file)
-            return sports_index_file
+            return index
         except:
             return None
-    return None
+    return index

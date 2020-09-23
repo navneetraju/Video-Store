@@ -168,5 +168,7 @@ dmypy.json
 
 ### Index ###
 *.index
+*.csv
+Videos/
 
 # End of https://www.toptal.com/developers/gitignore/api/python,video,visualstudiocode
