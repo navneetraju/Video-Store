@@ -11,6 +11,8 @@ pip install -r pip_reqs.txt
 ```
 python main.py
 ```
+### Dataset - SVW
+Data set used is [Sports Videos in the Wild (SVW): A Video Dataset for Sports Analysis](http://cvlab.cse.msu.edu/project-svw.html)
 ### Repository Maintenance
 - Each functionality is to be written in seperate python modules
 - Each module has to be included in main.py
