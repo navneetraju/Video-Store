@@ -3,28 +3,56 @@ import cv2
 import time
 import imutils
 
-#Returns FPS and number of frames in video
-def get_video_details(movie_name):
-    video = cv2.VideoCapture(movie_name)
+'''
+Returns Video FPS
+Return:
+    int: fps of video
+    None: Could not get FPS of video/could not read video
+'''
+def get_video_fps(file_name):
+    try:
+        video = cv2.VideoCapture(file_name)
+    except:
+        return None
     (major_ver,minor_ver,subminor_ver)=(cv2.__version__).split('.')
     if int(major_ver)<3:
         fps=video.get(cv2.cv.CV_CAP_PROP_FPS)
     else:
         fps=video.get(cv2.CAP_PROP_FPS)
+    fps=int(fps)
+    return fps
+
+'''
+Returns total frames in video
+Return:
+    int: total frames in video
+    None: Could not get frames of video/could not read video
+'''
+def get_num_frames(file_name):
     try:
-        if imutils.is_cv2():
-            prop=cv2.cv.CV_CAP_PROP_FRAME_COUNT 
-        else:
-            prop=cv2.CAP_PROP_FRAME_COUNT
+        video = cv2.VideoCapture(file_name)
+    except:
+        return None
+
+    if imutils.is_cv2():
+        prop=cv2.cv.CV_CAP_PROP_FRAME_COUNT
+    else:
+        prop=cv2.CAP_PROP_FRAME_COUNT
+    try:
         total=int(video.get(prop))
     except:
-        print('[INFO] Could not get total frames')
-        return (None,None)
-    fps=int(fps)
-    return (fps,total)
+        return None
+    return total
 
+'''
+Clips video between start frame and end frame, stores video after clipping
+Return:
+    path:str - Path of clipped video(with activity name)
+    None - Could not clip video/could not find video
+'''
 def clip_video(movie_name,start_frame,end_frame,activity_name):
-    vid_fps,total_frames=get_video_details(movie_name)
+    vid_fps=get_video_fps(movie_name)
+    total_frames=get_num_frames(movie_name)
     if vid_fps == None:
         print('[ERROR] Something went wrong')
         return None

@@ -1,6 +1,7 @@
 from inverted_index_base import *
 from clip_vid import *
 from query_parser import *
+from index_store import *
 
 '''
 Use this file for integration of all modules and system testing.
