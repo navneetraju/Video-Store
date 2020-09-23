@@ -6,7 +6,7 @@ def play_video(videos):
     Input: List of tuples in the format (videos, start_frame, end_frame)
     Output: plays all the videos one by one
     '''
-
+    flag = 0
     for video in videos:
         # create a video capture object
         try:
@@ -21,7 +21,7 @@ def play_video(videos):
             print("[Error] Opening the Video File")
 
         video_object.set(1,start_frame)
-
+        
         while(video_object.isOpened()):
             # read frame by frame
             ret, frame = video_object.read()
@@ -30,16 +30,19 @@ def play_video(videos):
                 # displays the frame
                 cv2.imshow(video_name + 'Frame', frame)
                 # press q on keyboard to exit
-                if(cv2.waitKey(25) & 0xFF == ord('q')):
+                # increasing the wait value decrases the fps
+                if(cv2.waitKey(40) & 0xFF == ord('q')):
+                    flag = 1
                     break
             else:
                 break
             start_frame += 1
-
+        if(flag == 1):
+            break
         # when playing of the video is done close all of the acquired resources
         video_object.release()
         cv2.destroyAllWindows()
 
-# if __name__ == "__main__":
-#     videos = [('../dataset/sample/video1.mp4', 300, 400), ('../dataset/sample/video2.mp4', 200, 250), ('../dataset/sample/video3.mp4', 280, 320)]
-#     play_video(videos)
+if __name__ == "__main__":
+    videos = [('../dataset/sample/video1.mp4', 200, 400), ('../dataset/sample/video2.mp4', 100, 250), ('../dataset/sample/video3.mp4', 150, 320)]
+    play_video(videos)
