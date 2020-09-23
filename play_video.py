@@ -38,6 +38,8 @@ def play_video(videos):
                 break
             start_frame += 1
         if(flag == 1):
+            video_object.release()
+            cv2.destroyAllWindows()
             break
         # when playing of the video is done close all of the acquired resources
         video_object.release()
