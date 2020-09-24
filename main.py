@@ -25,7 +25,15 @@ if __name__ =="__main__":
         if query=='q':
             exit()
         keywords=get_Keywords(query)
-        print(keywords)
+        if len(keywords)==0:
+            print('EMPTY QUERY')
+            continue
+        keywords=[i.lower() for i in keywords]
+        if "videos" in keywords:
+            keywords.remove("videos")
+        if len(keywords)==0:
+            print('EMPTY QUERY')
+            continue
         if len(keywords)==2:
             retrDocs=index.get_sport_activity(keywords[0],keywords[1])
         else:
@@ -34,5 +42,4 @@ if __name__ =="__main__":
             print('NO VIDEOS FOUND!')
             continue
         retrDocs=list(retrDocs.keys())
-        #print(retrDocs)
         play_video(retrDocs)

@@ -17,5 +17,5 @@ def read_from_csv(path):
 				f=row[0].split('/')
 				if len(row[2])==0 or row[2]=='0':
 					row[2]=get_num_frames("Videos/"+f[0]+"/"+f[1])
-				index.add_sport_action(f[0],row[3],("Videos/"+f[0]+"/"+f[1],int(row[1]),int(row[2])))
+				index.add_sport_action(f[0].lower(),row[3].lower(),("Videos/"+f[0]+"/"+f[1],int(row[1]),int(row[2])))
 	store_index(index)
