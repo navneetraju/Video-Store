@@ -3,3 +3,5 @@ imutils
 opencv-python
 moviepy
 nltk
+pymongo
+dnspython
