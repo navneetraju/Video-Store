@@ -71,10 +71,14 @@ with open("first.csv") as csv1:
             t_value["name"] = row[0]
             t_value["start_frame"] = row[1]
             t_value["end_frame"] = row[2]
+            # t_value["ref"] = "123"
+            # t_value["creator"] = []
 
             i_value["player"] = row[4]
+            # i_value["creator"] = [{}]
 
             e_value["action"] = row[3]
+            # e_value["creator"] = [{'$ref':"", '$id':""}]
             
             # To keep track of how many collections were updated after each data entry
             # 1: Temporal
@@ -89,57 +93,51 @@ with open("first.csv") as csv1:
             
             new_entry = {}
             if(t_value):
-                pre_check = temporal.find_one(t_value)
-                if(pre_check):
-                    t_index = pre_check["_id"]
-                else:
-                    t_val = temporal.insert_one(t_value)
-                    t_index = t_val.inserted_id
+
+                t_val = temporal.insert_one(t_value)
+                # t_val = temporal.find(t_value)
+                t_index = t_val.inserted_id
                 new_entry[1] = t_index
                 
             if(s_value):
-                pre_check = spatial.find_one(s_value)
-                if(pre_check):
-                    s_index = pre_check["_id"]
-                else:
-                    s_val = spatial.insert_one(s_value)
-                    s_index = s_val.inserted_id
+                s_val = spatial.insert_one(s_value)
+                # s_val = spatial.find(s_value)
+                s_index = s_val.inserted_id
                 new_entry[2] = s_index
 
             if(i_value):
-                pre_check = informational.find_one(i_value)
-                if(pre_check):
-                    i_index = pre_check["_id"]
-                else:
-                    i_val = informational.insert_one(i_value)
-                    i_index = i_val.inserted_id
+                i_val = informational.insert_one(i_value)
+                # print("=====", i_temp.inserted_id)
+                # i_val = informational.find(i_value)
+                i_index = i_val.inserted_id
                 new_entry[3] = i_index
 
             if(e_value):
-                pre_check = experiential.find_one(e_value)
-                if(pre_check):
-                    e_index = pre_check["_id"]
-                else:
-                    e_val = experiential.insert_one(e_value)
-                    e_index = e_val.inserted_id
+                e_val = experiential.insert_one(e_value)
+                # e_val = experiential.find(e_value)
+                e_index = e_val.inserted_id
                 new_entry[4] = e_index
 
             if(c_value):
-                pre_check = causality.find_one(c_value)
-                if(pre_check):
-                    c_index = pre_check["_id"]
-                else:
-                    c_val = causality.insert_one(c_value)
-                    c_index = c_val.inserted_id
+                c_val = causality.insert_one(c_value)
+                # c_val = causality.find(c_value)
+                c_index = c_val.inserted_id
                 new_entry[5] = c_index
 
             index = {1:t_index, 2: s_index, 3: i_index, 4: e_index, 5: c_index}
-         
-            # Updating the links between the documents
+            # ref[1].update(t_value, {'$push' : {"creator": {'$ref':"Informational", '$id':i_index}} })
+            # print("Done")
+            
+
             for i in new_entry:
                 dest = i
                 for j in new_entry:
                     if(i != j):
-                        res = ref[dest].update(check[dest], {'$push' : {"creator": {'$ref': name[j], '$id': index[j]}}})
+                        # print("Reference", ref[i], ref[j])
+                        ref[dest].update(check[dest], {'$push' : {"creator": {'$ref': name[j], '$id': index[j]}}})
             
+            # temporal.update(t_value, {'$push' : {"creator": {'$ref':"Informational", '$id':i_index}} })
+            # print(new_entry)
+            # print(row)
+            # print(t_index, s_index, e_index, i_index, c_index)
         line_count += 1
