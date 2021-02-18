@@ -65,47 +65,47 @@ def read_csv(filename):
                 
                 new_entry = {}
                 if(entry_data[1]):
-                    pre_check = ref[1].find_one(t_value)
+                    pre_check = ref[1].find_one(entry_data[1])
                     if(pre_check):
                         t_index = pre_check["_id"]
                     else:
-                        t_val = ref[1].insert_one(t_value)
+                        t_val = ref[1].insert_one(entry_data[1])
                         t_index = t_val.inserted_id
                     new_entry[1] = t_index
                     
                 if(entry_data[2]):
-                    pre_check = ref[1].find_one(s_value)
+                    pre_check = ref[1].find_one(entry_data[2])
                     if(pre_check):
                         s_index = pre_check["_id"]
                     else:
-                        s_val = ref[2].insert_one(s_value)
+                        s_val = ref[2].insert_one(entry_data[2])
                         s_index = s_val.inserted_id
                     new_entry[2] = s_index
 
                 if(entry_data[3]):
-                    pre_check = ref[3].find_one(i_value)
+                    pre_check = ref[3].find_one(entry_data[3])
                     if(pre_check):
                         i_index = pre_check["_id"]
                     else:
-                        i_val = ref[3].insert_one(i_value)
+                        i_val = ref[3].insert_one(entry_data[3])
                         i_index = i_val.inserted_id
                     new_entry[3] = i_index
 
                 if(entry_data[4]):
-                    pre_check = ref[4].find_one(e_value)
+                    pre_check = ref[4].find_one(entry_data[4])
                     if(pre_check):
                         e_index = pre_check["_id"]
                     else:
-                        e_val = ref[4].insert_one(e_value)
+                        e_val = ref[4].insert_one(entry_data[4])
                         e_index = e_val.inserted_id
                     new_entry[4] = e_index
 
                 if(entry_data[5]):
-                    pre_check = ref[5].find_one(c_value)
+                    pre_check = ref[5].find_one(entry_data[5])
                     if(pre_check):
                         c_index = pre_check["_id"]
                     else:
-                        c_val = ref[5].insert_one(c_value)
+                        c_val = ref[5].insert_one(entry_data[5])
                         c_index = c_val.inserted_id
                     new_entry[5] = c_index
 
