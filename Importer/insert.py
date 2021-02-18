@@ -61,10 +61,10 @@ def read_csv(filename):
                 ref = connect("Test")
                 name = {1:"Temporal", 2:"Spatial", 3:"Informational", 4:"Experiential", 5:"Causality"}
                 # to find the correct document to update the links
-                check = {1:t_value, 2: s_value, 3: i_value, 4: e_value, 5: c_value}
+                entry_data = {1:t_value, 2: s_value, 3: i_value, 4: e_value, 5: c_value}
                 
                 new_entry = {}
-                if(t_value):
+                if(entry_data[1]):
                     pre_check = ref[1].find_one(t_value)
                     if(pre_check):
                         t_index = pre_check["_id"]
@@ -73,7 +73,7 @@ def read_csv(filename):
                         t_index = t_val.inserted_id
                     new_entry[1] = t_index
                     
-                if(s_value):
+                if(entry_data[2]):
                     pre_check = ref[1].find_one(s_value)
                     if(pre_check):
                         s_index = pre_check["_id"]
@@ -82,7 +82,7 @@ def read_csv(filename):
                         s_index = s_val.inserted_id
                     new_entry[2] = s_index
 
-                if(i_value):
+                if(entry_data[3]):
                     pre_check = ref[3].find_one(i_value)
                     if(pre_check):
                         i_index = pre_check["_id"]
@@ -91,7 +91,7 @@ def read_csv(filename):
                         i_index = i_val.inserted_id
                     new_entry[3] = i_index
 
-                if(e_value):
+                if(entry_data[4]):
                     pre_check = ref[4].find_one(e_value)
                     if(pre_check):
                         e_index = pre_check["_id"]
@@ -100,7 +100,7 @@ def read_csv(filename):
                         e_index = e_val.inserted_id
                     new_entry[4] = e_index
 
-                if(c_value):
+                if(entry_data[5]):
                     pre_check = ref[5].find_one(c_value)
                     if(pre_check):
                         c_index = pre_check["_id"]
@@ -115,7 +115,7 @@ def read_csv(filename):
                     dest = i
                     for j in new_entry:
                         if(i != j):
-                            ref[dest].update(check[dest], {'$push' : {"creator": {'$ref': name[j], '$id': index[j]}}})
+                            ref[dest].update(entry_data[dest], {'$push' : {"creator": {'$ref': name[j], '$id': index[j]}}})
                 
             line_count += 1
     return "Done..!"
