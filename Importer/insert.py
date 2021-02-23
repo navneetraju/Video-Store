@@ -38,7 +38,9 @@ def read_csv(filename):
         line_count = 0
         # Assuming we know the required parameters
         for row in read:
-            if(line_count != 0):
+            if(line_count == 10):
+                break
+            if(line_count > 0):
                 t_value = {}
                 s_value = {}
                 i_value = {}
@@ -53,11 +55,18 @@ def read_csv(filename):
                 t_value["name"] = row[0]
                 t_value["start_frame"] = row[1]
                 t_value["end_frame"] = row[2]
+                if(row[3]):
+                    s_value["spatial"] = row[3]
 
-                i_value["player"] = row[4]
+                if(row[4]):
+                    i_value["informational"] = row[4]
 
-                e_value["action"] = row[3]
+                if(row[5]):
+                    e_value["experiential"] = row[5]
                 
+                if(row[6]):
+                    c_value["causality"] = row[6]
+
                 ref = connect("Test")
                 name = {1:"Temporal", 2:"Spatial", 3:"Informational", 4:"Experiential", 5:"Causality"}
                 # to find the correct document to update the links
@@ -74,7 +83,7 @@ def read_csv(filename):
                     new_entry[1] = t_index
                     
                 if(entry_data[2]):
-                    pre_check = ref[1].find_one(entry_data[2])
+                    pre_check = ref[2].find_one(entry_data[2])
                     if(pre_check):
                         s_index = pre_check["_id"]
                     else:
@@ -118,6 +127,8 @@ def read_csv(filename):
                             ref[dest].update(entry_data[dest], {'$push' : {"creator": {'$ref': name[j], '$id': index[j]}}})
                 
             line_count += 1
+        
+
     return "Done..!"
 
-print(read_csv("first.csv"))
+print(read_csv("Converted_Dataset.csv"))
