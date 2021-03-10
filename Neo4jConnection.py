@@ -33,7 +33,4 @@ class Neo4jConnection:
         jsonArray = list()
         for i in result:
             jsonArray.append(dict(i))
-        return jsonArray
-
-
-    
+        return jsonArray 
