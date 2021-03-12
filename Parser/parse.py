@@ -99,6 +99,7 @@ class Parser:
         response = dict()
         response['type'] = Constants.INSERT
         response['parsedDict'] = rawParsed.asDict()
+        print(response)
         return response
 
     def __selectResponseTrigger(self,rawParsed):

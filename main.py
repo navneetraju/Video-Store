@@ -2,6 +2,7 @@ from Parser import parse
 import Neo4jConnection 
 from DataParsing import dataparsing
 import sys
+import Constants
 
 parserObj = parse.Parser()
 dataParserObj = dataparsing.DataParser()
@@ -22,5 +23,8 @@ if __name__ == "__main__":
             parsedDictionary = parserObj.parseQuery(user_writing)[0]
         except Exception:
             print("INVALID QUERY")
-        dataParserObj.query(parsedDictionary)
+        if(parsedDictionary["type"] == Constants.INSERT):
+            pass
+        else:
+            dataParserObj.query(parsedDictionary)
         #print(dataParserObj.generateNeo4jQuery(parsedDictionary))

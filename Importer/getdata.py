@@ -26,43 +26,72 @@ def connect(dbname):
     return {1:temporal, 2: spatial, 3: informational, 4: experiential, 5: causality}
 
 
-
-
-def get_data(filename, db_ref):
+def read_insert(filename, db_ref):
     """
     Read the data from the CSV File and convert data into the appropriate format {1:'', 2:'', 3:'', 4:'', 5:''}
     And also insert the data into the DB.
     Input: filename and the return value from the connect method
     Output: Data will be parsed and added to the DB row by row
     """
-
     import collections
+
+    t_value = {}
+    s_value = {}
+    e_value = {}
+    i_value = {}
+    c_value = {}
 
     with open(filename, "r") as file:
         csv_read = csv.reader(file, delimiter = ",")
         line = 0
-        
         for row in csv_read:
             res = collections.defaultdict(dict)
-            if(line == 5):
+            if(line == 30):
                 break
             if(line == 0):
                 line += 1
             else:
-                tags = row[0].split("|")
-                res[1] = {"name": row[1], "start_frame": row[2], "end_frame": row[3]}
-                res[3] = {"action": tags[0]}
+                t_value["name"] = row[0]
+                t_value["start_time"] = row[1]
+                t_value["end_time"] = row[2]
+                res[1] = t_value
+                if(row[3]):
+                    s_value["spatial"] = row[3]
+                    res[2] = s_value
+
+                if(row[4]):
+                    e_value["informational"] = row[4]
+                    res[3] = i_value
+
+                if(row[5]):
+                    i_value["experiencial"] = row[5]
+                    res[4] = e_value
+
+                if(row[6]):
+                    c_value["causality"] = row[6]
+                    res[5] = c_value                        
+                               
+                db_entry(res, db_ref)
+
+                # tags = row[0].split("|")
+                # res[1] = {"name": row[1], "start_frame": row[2], "end_frame": row[3]}
+                # res[3] = {"action": tags[0]}
                 
-                pos_tag = nltk.pos_tag(tags)
-                                        
-                verbs = [word for word, tag in pos_tag if tag == 'VBG' or tag == 'VBD' or tag == 'VBP']
+                # pos_tag = nltk.pos_tag(tags)
+                # for tag in pos_tag:
+                #     if(tag[1] not in full):
+                #         full[tag[1]] = []
+                #         full[tag[1]].append(tag[0])
+                #     else:
+                #         full[tag[1]].append(tag[0])             
+                # verbs = [word for word, tag in pos_tag if tag == 'VBG' or tag == 'VBD' or tag == 'VBP']
                 # res[row[1]] = verbs
                 line += 1
-                db_entry(res, db_ref)
+                # db_entry(res, db_ref)``
                 # full_data.append(res)
+        # print(full)
 
 def db_entry(entry_data, ref):
-
     """
     Entry to the DB is made from the input data received. And the ref i.e., the return of the connect method
     Input: JSON Object of the data to be inserted into the DB.
@@ -85,7 +114,7 @@ def db_entry(entry_data, ref):
         new_entry[1] = t_index
         
     if(entry_data[2]):
-        pre_check = ref[1].find_one(entry_data[2])
+        pre_check = ref[2].find_one(entry_data[2])
         if(pre_check):
             s_index = pre_check["_id"]
         else:
@@ -126,8 +155,8 @@ def db_entry(entry_data, ref):
         dest = i
         for j in new_entry:
             if(i != j):
-                ref[dest].update(entry_data[dest], {'$push' : {"creator": {'$ref': name[j], '$id': index[j]}}})
+                ref[dest].update_one(entry_data[dest], {'$push' : {"creator": {'$ref': name[j], '$id': index[j]}}})
 
 ref = connect("Test")
-result = get_data("MHVU_Train.csv", ref)
+read_insert("Converted_Dataset.csv", ref)
 

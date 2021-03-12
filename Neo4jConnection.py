@@ -15,15 +15,16 @@ class Neo4jConnection:
         if self.__driver is not None:
             self.__driver.close()
         
-    def query(self, query, db=None):
+    def query(self, query, db=None, json_obj=None):
         assert self.__driver is not None, "Driver not initialized!"
         session = None
         response = None
         try: 
             session = self.__driver.session(database=db) if db is not None else self.__driver.session() 
-            response = list(session.run(query))
+            response = list(session.run(query, batch=json_obj))
         except Exception as e:
             print("Query failed:", e)
+            exit()
         finally: 
             if session is not None:
                 session.close()

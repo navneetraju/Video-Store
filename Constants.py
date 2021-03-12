@@ -5,7 +5,7 @@ MATCH = "MATCH"
 SPACE = " "
 COMMA = ","
 
-EXPERENTIAL = "EXPERIENTIAL"
+EXPERENTIAL = "EXPERENTIAL"
 SPATIAL = "SPATIAL"
 TEMPORAL = "TEMPORAL"
 CAUSALITY = "CAUSALITY"
@@ -29,12 +29,21 @@ NEO4J_NODE_SIMPLE_MAPPING = {
 	"informational": INFORMATIONAL
 }
 
+NEO4J_NODE_NAMES = {
+	EXPERENTIAL: "event",
+	SPATIAL: "spatial",
+	TEMPORAL: "temporal",
+	CAUSALITY: "cause",
+	INFORMATIONAL: "info",
+	VIDEO: "video"
+}
+
 NEO4J_NODE_TYPE_MAPPING = {
-	"event": "(event:Experiential)",
-	"spatial": "(spatial:Spatial)",
-	"temporal" : "(temporal:Temporal)",
-	"causality": "(cause:Causality)",
-	"informational": "(info:Infromational)",
+	EXPERENTIAL: "(event:Experiential)",
+	SPATIAL: "(spatial:Spatial)",
+	TEMPORAL : "(temporal:Temporal)",
+	CAUSALITY: "(cause:Causality)",
+	INFORMATIONAL: "(info:Infromational)",
 	VIDEO: "(video: Video)"
 }
 
@@ -47,5 +56,13 @@ NEO4J_CONDITIONAL_MAPPING = {
 	},
 	INFORMATIONAL: "info.information=",
 }
+
+NEO4J_RELATIONSHIP_VT = "IS_PART_OF"
+
+NEO4J_RELATIONSHIP_IT = "PRESENT"
+
+NEO4J_RELATIONSHIP_ET = "DURING"
+
+NEO4J_RELATIONSHIP_ST = "AT"
 
 NEO4J_SELECT_RETURN = "RETURN temporal,video"

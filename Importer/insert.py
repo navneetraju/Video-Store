@@ -12,7 +12,8 @@ def connect(dbname):
     Output: Details/References of the collections and DB
     """
     from pymongo import MongoClient
-    client = MongoClient("mongodb+srv://saioni:mongodb0605@cluster0.gblcy.mongodb.net/test?authSource=admin&replicaSet=atlas-l0sheq-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true")
+    # client = MongoClient("mongodb+srv://saioni:mongodb0605@cluster0.gblcy.mongodb.net/test?authSource=admin&replicaSet=atlas-l0sheq-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true")
+    client = MongoClient("mongodb://localhost:27017")
     db = client[dbname]
 
     temporal = db["Temporal"]
@@ -38,8 +39,8 @@ def read_csv(filename):
         line_count = 0
         # Assuming we know the required parameters
         for row in read:
-            if(line_count == 10):
-                break
+            # if(line_count == 50):
+            #     break
             if(line_count > 0):
                 t_value = {}
                 s_value = {}
@@ -124,7 +125,7 @@ def read_csv(filename):
                     dest = i
                     for j in new_entry:
                         if(i != j):
-                            ref[dest].update(entry_data[dest], {'$push' : {"creator": {'$ref': name[j], '$id': index[j]}}})
+                            ref[dest].update_one(entry_data[dest], {'$push' : {"creator": {'$ref': name[j], '$id': index[j]}}})
                 
             line_count += 1
         
