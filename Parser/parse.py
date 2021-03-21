@@ -15,6 +15,9 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
 import Constants
+import properties
+import logging
+logging.basicConfig(format='%(asctime)s %(message)s',level=properties.LOG_LEVEL)
 
 
 class Parser:
@@ -33,13 +36,14 @@ class Parser:
         # define SQL tokens
         selectStmt = Forward()
         insertStmt = Forward()
-        INSERT, INTO, SELECT, FROM, DURING, END, OF, BEGIN, BY, AT, IN, NEAR, ON, CAUSING, CAUSED = map(
-            CaselessKeyword, "insert into select from during end of begin by at in near on causing caused".split()
+        INSERT, INTO, SELECT, FROM, DURING, END, OF, BEGIN, BY, AT, IN, NEAR, ON, CAUSING, CAUSED, HAVING, TAG = map(
+            CaselessKeyword, "insert into select from during end of begin by at in near on causing caused having tag".split()
         )
 
         DURING_END_OF = DURING + END + OF
         BEGIN_OF = BEGIN + OF
         CAUSED_BY = CAUSED + BY
+        HAVING_TAG = HAVING + TAG
 
         ident = QuotedString("'").setName("identifier")
         columnName = ident.setName("event name")
@@ -74,7 +78,7 @@ class Parser:
 
         propertyList = (
                         ZeroOrMore((BEGIN_OF | DURING_END_OF | DURING) + temporalNameList("temporal"))
-                        & ZeroOrMore(BY + informationalNameList("informational"))
+                        & ZeroOrMore((BY | HAVING_TAG) + informationalNameList("informational"))
                         & ZeroOrMore((AT | IN | NEAR | ON) + spatialNameList("spatial"))
                         & ZeroOrMore((CAUSING | CAUSED_BY) + causalityNameList("causality"))
                         )
@@ -96,6 +100,7 @@ class Parser:
         return simpleSQL
         
     def __insertResponseTrigger(self,rawParsed):
+        logging.info("INSERT query type parsed")
         response = dict()
         response['type'] = Constants.INSERT
         response['parsedDict'] = rawParsed.asDict()
@@ -103,6 +108,7 @@ class Parser:
         return response
 
     def __selectResponseTrigger(self,rawParsed):
+        logging.info("SELECT query type parsed")
         response = dict() 
         response['type'] = Constants.SELECT
         response['parsedDict'] = rawParsed.asDict()
@@ -110,20 +116,6 @@ class Parser:
     
 
     def parseQuery(self,query):
+        logging.info("Received parsing request..")
         Parsed = self.grammar.parseString(query)
         return Parsed
-
-'''
-if __name__ == "__main__":
-
-    myParser = Parser()
-
-    result=myParser.parseQuery(
-        """\
-        INSERT 'Data.csv'\
-        INTO 'IndvsAus'
-        """
-    )
-
-    print(result)
-'''
