@@ -1,6 +1,7 @@
 from Parser import parse
 import Neo4jConnection 
 from DataParsing import dataparsing
+from Import import read_csv
 import sys
 import Constants
 from Exceptions import *
@@ -31,6 +32,13 @@ class Handler:
 
         if parsedDictionary['type'] == Constants.INSERT:
             #To-do @Durga to add insert object call and handle exceptions
+            try:
+                logging.info("Reading the CSV and Inserting into the Database...")
+                self.readObj = read_csv.ReadCsv("Converted_Dataset.csv", "youtube")
+                self.readObj.read_csv()
+                return json.dumps({"code": 200, "message": "CSV File is read and data is inserted into the DB"})
+            except:
+                logging.error("Something Went Wrong with reading the CSV...!")
             pass 
         elif parsedDictionary['type'] == Constants.SELECT:
             result = None

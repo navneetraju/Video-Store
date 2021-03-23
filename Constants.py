@@ -54,13 +54,22 @@ NEO4J_NODE_MAPPING = {
     "informational": INFORMATIONAL
 }
 
+NEO4J_NODE_NAMES = {
+	EXPERENTIAL: "event",
+	SPATIAL: "spatial",
+	TEMPORAL: "temporal",
+	CAUSALITY: "cause",
+	INFORMATIONAL: "info",
+	VIDEO: "video"
+}
+
 NEO4J_NODE_TYPE_MAPPING = {
     EXPERENTIAL: "(event:Experiential)",
     SPATIAL: "(spatial:Spatial)",
     TEMPORAL : "(temporal:Temporal)",
     CAUSALITY: "(cause:Causality)",
     INFORMATIONAL: "(info:Infromational)",
-    VIDEO: "(video: Video)"
+    VIDEO: "(video:Video)"
 }
 
 NEO4J_FUZZY_INDEX = {
