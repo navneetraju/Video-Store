@@ -1,10 +1,9 @@
-from connect_db import Connect_DB
-from create_node_relations import Node_Relations
-
 import os, sys
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
+from Import import connect_db
+from Import import create_node_relations
 import logging
 import properties
 logging.basicConfig(format='%(asctime)s %(message)s',level=properties.LOG_LEVEL)
@@ -13,13 +12,13 @@ import Constants
 class ReadCsv:
     def __init__(self, filename, dbName):
         self.dbName = dbName
-        Connect_DB("youtube")
+        connect_db.Connect_DB("youtube")
         if(filename):
             self.filename = filename
         else:
             logging.info("Filename not Provided...")
             exit()
-        self.node_object = Node_Relations(self.dbName)
+        self.node_object = create_node_relations.Node_Relations(self.dbName)
 
     def read_csv(self):
         """
