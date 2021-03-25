@@ -13,6 +13,15 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { mainListItems} from './listItems';
+import QueryEditor from './QueryEditor';
+import Grid from '@material-ui/core/Grid';
+import { Hidden } from '@material-ui/core';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import BubbleChart from '@material-ui/icons/BubbleChart';
+import Storage from '@material-ui/icons/Storage'
 
 const drawerWidth = 240;
 
@@ -93,10 +102,19 @@ const styles = theme => ({
   },
 });
 
-class Dashboard extends React.Component {
-  state = {
-    open: false,
-  };
+class DataImporter extends React.Component {
+	state = {
+		open: false,
+	  };
+	
+	constructor(props){
+		super(props);
+		this.changePage = this.changePage.bind(this);
+	}
+
+	changePage(something,event){
+		this.props.pageHandler(something);
+	}
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -152,17 +170,48 @@ class Dashboard extends React.Component {
             </IconButton>
           </div>
           <Divider />
-          <List>{mainListItems}</List>
+          <List>  <div>
+    <ListItem button onClick={(event) => this.changePage("DASHBOARD", event)}>
+      <ListItemIcon>
+        <DashboardIcon />
+      </ListItemIcon>
+      <ListItemText primary="Dashboard" />
+    </ListItem>
+    <ListItem button onClick={(event) => this.changePage("GRAPH", event)}>
+      <ListItemIcon >
+        <BubbleChart />
+      </ListItemIcon>
+      <ListItemText primary="GraphVisualizer"/>
+    </ListItem>
+    <ListItem button onClick={(event) => this.changePage("IMPORTER", event)}>
+      <ListItemIcon>
+        <Storage />
+      </ListItemIcon>
+      <ListItemText primary="Database Importer"/>
+    </ListItem>
+  </div></List>
         </Drawer>
+
+
         <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Typography variant="h4" gutterBottom component="h2">
+		  	Data Importer
+          </Typography>
+		  <Hidden>
+		  <Grid container>
+      </Grid>
+	  </Hidden>
         </main>
+
+
       </div>
     );
   }
 }
 
-Dashboard.propTypes = {
+DataImporter.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Dashboard);
+export default withStyles(styles)(DataImporter);

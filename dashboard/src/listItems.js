@@ -6,18 +6,9 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import BubbleChart from '@material-ui/icons/BubbleChart';
 import Storage from '@material-ui/icons/Storage'
 
-function dashTransitionHandler(){
-	window.location.href="./Dashboard.js"
-}
-function dbTransitionHandler(){
-	window.location.href="./DatabaseImporter.js"
-}
-function graphTransitionHandler(){
-	window.location.href="./Dashboard.js"
-}
 export const mainListItems = (
   <div>
-    <ListItem button onClick={dashTransitionHandler}>
+    <ListItem button>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
@@ -33,12 +24,8 @@ export const mainListItems = (
       <ListItemIcon>
         <Storage />
       </ListItemIcon>
-      <ListItemText primary="Database Importer" onClick={dbTransitionHandler}/>
+      <ListItemText primary="Database Importer"/>
     </ListItem>
   </div>
 );
 
-export const secondaryListItems = (
-  <div>
-  </div>
-);

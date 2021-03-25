@@ -13,7 +13,9 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// Register a new language
+
+function createEditor(){
+	// Register a new language
 monaco.languages.register({ id: 'mySpecialLanguage' });
 
 // Register a tokens provider for the language
@@ -64,19 +66,18 @@ monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
 		return { suggestions: suggestions };
 	}
 });
-
-window.editor = monaco.editor.create(document.getElementById("queryEditorDivision"), {
-	theme: 'myCoolTheme',
-	value: "SELECT '<event>'\nAT '<spatial>'\nFROM'<database>'",
-	language: 'mySpecialLanguage',
-	lineNumbers: "on",
-	automaticLayout: true,
-	roundedSelection: false,
-	scrollBeyondLastLine: false,
-	readOnly: false,
-});
-
-
+	window.editor = monaco.editor.create(document.getElementById("queryEditorDivision"), {
+		theme: 'myCoolTheme',
+		value: "SELECT '<event>'\nAT '<spatial>'\nFROM'<database>'",
+		language: 'mySpecialLanguage',
+		lineNumbers: "on",
+		automaticLayout: true,
+		roundedSelection: false,
+		scrollBeyondLastLine: false,
+		readOnly: false,
+	});
+}
+export {createEditor};
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
