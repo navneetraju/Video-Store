@@ -21,7 +21,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import BubbleChart from '@material-ui/icons/BubbleChart';
-import Storage from '@material-ui/icons/Storage'
+import Storage from '@material-ui/icons/Storage';
+import { NeoGraph, ResponsiveNeoGraph } from "./NeoGraph";
 
 const drawerWidth = 240;
 
@@ -199,7 +200,15 @@ class GraphVisualizer extends React.Component {
 		  	Graph Visualizer
           </Typography>
 		  <Hidden>
-		  <Grid container>
+		  <Grid container alignItems="stretch">
+		  <div className="App" style={{ fontFamily: "Quicksand" }}>
+			<ResponsiveNeoGraph
+				containerId={"id0"}
+				neo4jUri="bolt://10.10.1.146:7687"
+				neo4jUser="neo4j"
+				neo4jPassword="neo4j"
+			/>
+		</div>
       </Grid>
 	  </Hidden>
         </main>
