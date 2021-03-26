@@ -34,7 +34,7 @@ class DataParser:
         except Neo4JFailedRequest as e:
             logging.error("Handling exception: ",exc_info=True)
             return json.dumps({"code":500,"message":"Failed to query Neo4J Database: "+ str(e)})
-        return json.dumps({"code":200,"response":self.__postProcessResult(res)})
+        return {"code":200,"response":self.__postProcessResult(res)}
     
     def fuzzyQuery(self,queryRequest:dict):
         logging.info("Received fuzzy query ...")
@@ -51,7 +51,7 @@ class DataParser:
         except Neo4JFailedRequest as e:
             logging.error("Handling exception: ",exc_info=True)
             return json.dumps({"code":500,"message":"Failed to query Neo4J Database: "+ str(e)})
-        return json.dumps({"code":200,"response":self.__postProcessFuzzyResult(res)})
+        return {"code":200,"response":self.__postProcessFuzzyResult(res)}
 
     def __generateNeo4jQuery(self,requestDictionary):
         logging.info("Creating Neo4J query")
