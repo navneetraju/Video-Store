@@ -13,7 +13,9 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// Register a new language
+
+function createEditor(){
+	// Register a new language
 monaco.languages.register({ id: 'mySpecialLanguage' });
 
 // Register a tokens provider for the language
@@ -21,7 +23,8 @@ monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
 	tokenizer: {
 		root: [
 			[/.*SELECT|INSERT|INTO|SELECT|FROM|DURING|END|OF|BEGIN|BY|AT|IN|NEAR|ON|CAUSING|CAUSED|HAVING|TAG/i, "qtoken"],
-			[/'[^'"]*'(?=(?:[^"]*"[^"]*")*[^"]*$)/,"singleQuoteString"]
+			[/'[^'"]*'(?=(?:[^"]*"[^"]*")*[^"]*$)/,"singleQuoteString"],
+			[/\/\/.*/,"commentString"]
 		]
 	}
 });
@@ -32,7 +35,8 @@ monaco.editor.defineTheme('myCoolTheme', {
 	inherit: false,
 	rules: [
 		{ token: 'qtoken', foreground: '0078d7', fontStyle: 'bold' },
-		{ token: "singleQuoteString", foreground: 'ff0000', fontStyle: 'italic' }
+		{ token: "singleQuoteString", foreground: 'ff0000', fontStyle: 'italic' },
+		{ token: "commentString", foreground: '229977'}
 	],
 });
 
@@ -40,43 +44,53 @@ monaco.editor.defineTheme('myCoolTheme', {
 monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
 	provideCompletionItems: () => {
 		var suggestions = [{
-			label: 'simpleText',
-			kind: monaco.languages.CompletionItemKind.Text,
-			insertText: 'simpleText'
-		}, {
-			label: 'testing',
-			kind: monaco.languages.CompletionItemKind.Keyword,
-			insertText: 'testing(${1:condition})',
-			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
-		}, {
-			label: 'ifelse',
+			label: 'SELECT',
 			kind: monaco.languages.CompletionItemKind.Snippet,
-			insertText: [
-				'if (${1:condition}) {',
-				'\t$0',
-				'} else {',
-				'\t',
-				'}'
+			insertText: ["SELECT '<Event>'"
 			].join('\n'),
 			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-			documentation: 'If-Else Statement'
-		}];
+			documentation: 'Experiential'
+		},
+		{
+			label: 'FROM',
+			kind: monaco.languages.CompletionItemKind.Snippet,
+			insertText: ["FROM '<Database>'"
+			].join('\n'),
+			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+			documentation: 'Database'
+		},
+		{
+			label: 'HAVING TAG',
+			kind: monaco.languages.CompletionItemKind.Snippet,
+			insertText: ["HAVING TAG '<Information>'"
+			].join('\n'),
+			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+			documentation: 'Informational'
+		},
+		{
+			label: 'AT',
+			kind: monaco.languages.CompletionItemKind.Snippet,
+			insertText: ["AT '<Spatial>'"
+			].join('\n'),
+			insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+			documentation: 'Spatial'
+		},
+	];
 		return { suggestions: suggestions };
 	}
 });
-
-window.editor = monaco.editor.create(document.getElementById("queryEditorDivision"), {
-	theme: 'myCoolTheme',
-	value: "SELECT '<event>'\nAT '<spatial>'\nFROM'<database>'",
-	language: 'mySpecialLanguage',
-	lineNumbers: "on",
-	automaticLayout: true,
-	roundedSelection: false,
-	scrollBeyondLastLine: false,
-	readOnly: false,
-});
-
-
+	window.editor = monaco.editor.create(document.getElementById("queryEditorDivision"), {
+		theme: 'myCoolTheme',
+		value: "//VetaQL Here",
+		language: 'mySpecialLanguage',
+		lineNumbers: "on",
+		automaticLayout: true,
+		roundedSelection: false,
+		scrollBeyondLastLine: false,
+		readOnly: false,
+	});
+}
+export {createEditor};
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
