@@ -12,8 +12,6 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { mainListItems} from './listItems';
-import QueryEditor from './QueryEditor';
 import Grid from '@material-ui/core/Grid';
 import { Hidden } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
@@ -22,7 +20,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import BubbleChart from '@material-ui/icons/BubbleChart';
 import Storage from '@material-ui/icons/Storage';
-import { NeoGraph, ResponsiveNeoGraph } from "./NeoGraph";
+import {ResponsiveNeoGraph } from "./NeoGraph";
 
 const drawerWidth = 240;
 

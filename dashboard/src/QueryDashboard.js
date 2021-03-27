@@ -113,12 +113,16 @@ class QueryDashboard extends React.Component {
 	state = {
 		open: false,
 		response: null,
+		error: null,
+		loading: false,
+		isFuzzy: false,
 	  };
 	
 	constructor(props){
 		super(props);
 		this.handler = this.handler.bind(this);
 		this.changePage = this.changePage.bind(this);
+		this.loadingHandler = this.loadingHandler.bind(this);
 	}
 	componentDidMount(){
 		reloadPage();
@@ -127,9 +131,13 @@ class QueryDashboard extends React.Component {
 	changePage(something,event){
 		this.props.pageHandler(something);
 	}
-	handler(resp) {
-		console.log(resp);
-		this.setState({ response: resp });
+	handler(resp,err,isFuzzyB) {
+		console.log('Response,err ',resp,err);
+		this.setState({ response: resp ,error:err, isFuzzy:isFuzzyB});
+	}
+
+	loadingHandler(loadingBool){
+		this.setState({loading: loadingBool })
 	}
 
   handleDrawerOpen = () => {
@@ -208,23 +216,25 @@ class QueryDashboard extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Typography variant="h4" gutterBottom component="h2">
+          <Typography variant="h5" gutterBottom component="h2">
 		  	Query Editor
           </Typography>
 		  <Grid container spacing={3}>
           <QueryEditor/>
         <Grid item xs={3} >
-		  <SimpleQuery handler = {this.handler}/>
+		  <SimpleQuery handler = {this.handler} loadingHandler = {this.loadingHandler}/>
         </Grid>
 		<Grid item xs={3}>
-		  <FuzzyQuery/>
+		  <FuzzyQuery handler = {this.handler} loadingHandler = {this.loadingHandler}/>
         </Grid>
       </Grid>
-          <Typography variant="h4" gutterBottom component="h2">
+		  <br/>
+		  <br/>
+          <Typography variant="h5" gutterBottom component="h2">
             Results
           </Typography>
           <div className={classes.tableContainer}>
-            <SimpleTable response = {this.state.response}/>
+            <SimpleTable response = {this.state.response} error={this.state.error} isLoading={this.state.loading} isFuzzy={this.state.isFuzzy}/>
           </div>
         </main>
       </div>

@@ -22,13 +22,13 @@ class Handler:
     def query(self,requestQuery:str,fuzzy:bool):
         logging.info("Recieved query request, starting handling...")
         if requestQuery == None or len(requestQuery) == 0:
-            return json.dumps({"code":400,"message":"Invalid request query"})
+            return {"code":400,"message":"Invalid request query"}
         parsedDictionary = None 
         try:
             parsedDictionary = self.parserObj.parseQuery(requestQuery)[0]
         except Exception as e:
             logging.error("Handling parsing exception ",exc_info=True)
-            return json.dumps({"code":400,"message":"Query syntax error: "+ str(e)})
+            return {"code":400,"message":"Query syntax error: "+ str(e)}
 
         if parsedDictionary['type'] == Constants.INSERT:
             #To-do @Durga to add insert object call and handle exceptions
@@ -36,7 +36,7 @@ class Handler:
                 logging.info("Reading the CSV and Inserting into the Database...")
                 self.readObj = read_csv.ReadCsv("Converted_Dataset.csv", "youtube")
                 self.readObj.read_csv()
-                return json.dumps({"code": 200, "message": "CSV File is read and data is inserted into the DB"})
+                return {"code": 200, "message": "CSV File is read and data is inserted into the DB"}
             except:
                 logging.error("Something Went Wrong with reading the CSV...!")
             pass 

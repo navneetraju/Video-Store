@@ -1,14 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import useResizeAware from "react-resize-aware";
 import PropTypes from "prop-types";
 import Neovis from "neovis.js/dist/neovis.js";
 
 const NeoGraph = (props) => {
   const {
-    width,
-    height,
     containerId,
-    backgroundColor,
     neo4jUri,
     neo4jUser,
     neo4jPassword,
@@ -28,6 +24,7 @@ const NeoGraph = (props) => {
     };
     const vis = new Neovis(config);
     vis.render();
+	console.log("vis: ",vis)
   }, [neo4jUri, neo4jUser, neo4jPassword]);
 
   return (

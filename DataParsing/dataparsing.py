@@ -30,10 +30,10 @@ class DataParser:
             res = self.conn.query(neo4j_query,db=databaseName)
         except Neo4JWrongDB as e:
             logging.error("Handling exception: ",exc_info=True)
-            return json.dumps({"code":400,"message":"Queried database not found: "+ str(e)})
+            return {"code":400,"message":"Queried database not found: "+ str(e)}
         except Neo4JFailedRequest as e:
             logging.error("Handling exception: ",exc_info=True)
-            return json.dumps({"code":500,"message":"Failed to query Neo4J Database: "+ str(e)})
+            return {"code":500,"message":"Failed to query Neo4J Database: "+ str(e)}
         return {"code":200,"response":self.__postProcessResult(res)}
     
     def fuzzyQuery(self,queryRequest:dict):
@@ -48,10 +48,10 @@ class DataParser:
             res = self.conn.query(neo4j_fuzzy_query,db=databaseName)
         except Neo4JWrongDB as e:
             logging.error("Handling exception: ",exc_info=True)
-            return json.dumps({"code":400,"message":"Queried database not found: "+ str(e)})
+            return {"code":400,"message":"Queried database not found: "+ str(e)}
         except Neo4JFailedRequest as e:
             logging.error("Handling exception: ",exc_info=True)
-            return json.dumps({"code":500,"message":"Failed to query Neo4J Database: "+ str(e)})
+            return {"code":500,"message":"Failed to query Neo4J Database: "+ str(e)}
         return {"code":200,"response":self.__postProcessFuzzyResult(res)}
 
     def __generateNeo4jQuery(self,requestDictionary):
