@@ -47,7 +47,6 @@ class SimpleTable extends React.Component{
 			if(response.code === 200){
 				var isFuzzy = this.props.isFuzzy;
 				if(isFuzzy){
-
 					return(
 						<Paper className={classes.root} id="resultsPaper">
 						<Table className={classes.table}>

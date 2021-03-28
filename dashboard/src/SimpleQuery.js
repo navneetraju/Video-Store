@@ -17,7 +17,7 @@ class SimpleQuery extends React.Component {
 			body: JSON.stringify(requestBody)
 		}
 		console.log(window.editor.getValue());
-		fetch('http://127.0.0.1:8000/api/query/?fuzzy=false', requestOptions)
+		fetch('http://10.10.1.146:8000/api/query/?fuzzy=false', requestOptions)
 		.then(response => response.json())
 		.then(
 			(response) => {
