@@ -1,0 +1,26 @@
+# This ConfigMap gets passed to all core cluster members to configure them.
+# Take note that some networking settings like internal hostname still get configured
+# when the pod starts, but most non-networking specific configs can be tailored here.
+#
+# When your pods start, you will inherit the config in common-configmap.yaml, so you don't
+# need to repeat any of that here, just focus on overrides that are different than what's there.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "mygraph-neo4j-externally-addressable-replica-config"
+data:
+  NEO4J_ACCEPT_LICENSE_AGREEMENT: "yes"
+  NEO4J_dbms_mode: CORE
+  NEO4JLABS_PLUGINS: '["graph-data-science"]'
+  mygraph_neo4j_replica_0_NEO4J_dbms_default__advertised__address: 192.168.0.135
+  mygraph_neo4j_replica_0_NEO4J_dbms_connector_bolt_advertised__address: 192.168.0.135:7687
+  mygraph_neo4j_replica_0_NEO4J_dbms_connector_http_advertised__address: 192.168.0.135:7474
+  mygraph_neo4j_replica_0_NEO4J_dbms_connector_https_advertised__address: 192.168.0.135:7473
+  mygraph_neo4j_replica_1_NEO4J_dbms_default__advertised__address: 192.168.0.135
+  mygraph_neo4j_replica_1_NEO4J_dbms_connector_bolt_advertised__address: 192.168.0.135:7687
+  mygraph_neo4j_replica_1_NEO4J_dbms_connector_http_advertised__address: 192.168.0.135:7474
+  mygraph_neo4j_replica_1_NEO4J_dbms_connector_https_advertised__address: 192.168.0.135:7473
+  mygraph_neo4j_replica_2_NEO4J_dbms_default__advertised__address: 192.168.0.135
+  mygraph_neo4j_replica_2_NEO4J_dbms_connector_bolt_advertised__address: 192.168.0.135:7687
+  mygraph_neo4j_replica_2_NEO4J_dbms_connector_http_advertised__address: 192.168.0.135:7474
+  mygraph_neo4j_replica_2_NEO4J_dbms_connector_https_advertised__address: 192.168.0.135:7473
