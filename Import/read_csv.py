@@ -72,7 +72,7 @@ class ReadCsv:
                     
                     if(entry_data[Constants.VIDEO]):
                         logging.info("Creating a Video Node...")       
-                        self.node_object.create_node(entry_data[Constants.VIDEO], Constants.NEO4J_NODE_NAMES[Constants.VIDEO], Constants.NEO4J_NODE_TYPE_MAPPING[Constants.VIDEO])                                         
+                        self.node_object.create_node(entry_data[Constants.VIDEO], Constants.NEO4J_NODE_NAMES[Constants.VIDEO], Constants.NEO4J_NODE_TYPE_MAPPING[Constants.VIDEO])
                         logging.info("Video Node Created...!")
                         
                     if(entry_data[Constants.TEMPORAL]):
