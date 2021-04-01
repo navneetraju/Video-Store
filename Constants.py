@@ -22,6 +22,10 @@ def NEO4J_FUZZY_SCORE_AGGR(numIndexes):
         res += "s" + str(i) + "+"
     return res[:-1] + " as score"
 
+
+def NEO4J_RECOMMENDATION_QUERY(videoid):
+    return "MATCH (p1:Temporal {video_id: '"+videoid+"'})-[:PRESENT|:AT|:DURING]->(info1) WITH p1, collect(id(info1)) AS p1Info1 MATCH (p2:Temporal)-[:PRESENT|:AT|:DURING]->(info2) WHERE p1 <> p2 WITH p1, p1Info1, p2, collect(id(info2)) AS p2Info2 RETURN p1.video_id AS from, p2.video_id AS to, gds.alpha.similarity.jaccard(p1Info1, p2Info2) AS similarity, p1,p2 ORDER BY similarity DESC LIMIT 5"
+
 INSERT = "INSERT"
 SELECT = "SELECT"
 MATCH = "MATCH "
