@@ -1,3 +1,18 @@
+def NEO4J_NODE_VIDEO(json):
+    return "MERGE (video:Video {video_id : \""+ json["video_id"] + "\", Location: \"" + json["Location"] + "\", video_url: \"" + json["video_url"]+ "\"})"
+    
+def NEO4J_NODE_TEMPORAL(json):
+    return "MERGE (temporal:Temporal {video_id : \""+ json["video_id"] +"\", start_frame: \"" + json["start_frame"] + "\", end_frame: \"" + json["end_frame"] + "\"})"
+
+def NEO4J_NODE_SPATIAL(json):
+    return "MERGE (spatial:Spatial {place : \"" + json["place"] + "\"})"
+
+def NEO4J_NODE_INFORMATIONAL(json):
+    return "MERGE (info:Informational {information : \"" + json["information"] + "\"})"
+
+def NEO4J_NODE_EXPERIENTIAL(json):
+    return "MERGE (event:Experiential {event : \"" + json["event"] + "\"})"
+
 def NEO4J_SIMPLE_EVENT(event):
     return "(:Experiential{event:" + "\"{}\"".format(event) + "})-[:DURING]->(temporal:Temporal)-[:IS_PART_OF]->(video:Video)"
 

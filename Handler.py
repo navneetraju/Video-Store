@@ -2,6 +2,7 @@ from Parser import parse
 import Neo4jConnection 
 from DataParsing import dataparsing
 from Import import read_csv
+from Import import constraint_combine
 import sys
 import Constants
 from Exceptions import *
@@ -34,8 +35,10 @@ class Handler:
             #To-do @Durga to add insert object call and handle exceptions
             try:
                 logging.info("Reading the CSV and Inserting into the Database...")
-                self.readObj = read_csv.ReadCsv("Converted_Dataset.csv", "youtube")
-                self.readObj.read_csv()
+                # self.readObj = read_csv.ReadCsv("Converted_Dataset.csv", "youtube")
+                # self.readObj.read_csv()
+                self.write_obj = constraint_combine.Combine()
+                self.write_obj.combine("../../HVU_Tags_Categories_V1.0.csv", "../../HVU_Train_V1.0.csv")
                 return {"code": 200, "message": "CSV File is read and data is inserted into the DB"}
             except:
                 logging.error("Something Went Wrong with reading the CSV...!")
