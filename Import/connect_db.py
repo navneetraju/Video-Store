@@ -20,9 +20,8 @@ class Connect_DB:
     def connect_to_db(self, dbName):
         try:
             logging.info("Creating the Database "+dbName)
-            self.conn.query("CREATE DATABASE youtube IF NOT EXISTS")
+            self.conn.query("CREATE DATABASE " + self.dbName + " IF NOT EXISTS")
             logging.info("Database " + dbName + " Created...")
         except:
             logging.error("Database is not Created.. Something went Wrong")
             exit()
-               
