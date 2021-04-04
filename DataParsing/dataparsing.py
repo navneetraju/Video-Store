@@ -23,6 +23,7 @@ class DataParser:
         logging.info("Received simple query ...")
         requestDictionary = queryRequest[Constants.PARSED_DICT]
         neo4j_query = self.__generateNeo4jQuery(requestDictionary)
+        logging.info(neo4j_query)
         res = None
         try:
             databaseName = requestDictionary['database'][0]
@@ -40,7 +41,7 @@ class DataParser:
         logging.info("Received fuzzy query ...")
         requestDictionary = queryRequest[Constants.PARSED_DICT]
         neo4j_fuzzy_query = self.__generateNeo4jFuzzyQuery(requestDictionary)
-        print(neo4j_fuzzy_query)
+        logging.info(neo4j_fuzzy_query)
         res = None
         try:
             databaseName = requestDictionary['database'][0]
