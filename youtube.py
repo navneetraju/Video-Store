@@ -17,4 +17,4 @@ class YoutubeDataAPI:
 		#duration = self.__getVideoDuration(videoId)
 		fps = 30
 		start_head = time.strftime("%Mm%Ss", time.gmtime(round(start_frame/fps,2)))
-		return videoURL+"#"+start_head
+		return videoURL+"#t="+start_head

@@ -1,0 +1,6 @@
+﻿query
+SELECT 'adventure'\nAT 'mountain'\nHAVING TAG 'terrain'\nFROM 'youtube'
+SELECT 'pouring_beer'\nAT 'pub'\nBY 'bartender'\nFROM 'youtube'
+SELECT 'playing_basketball'\nAT 'apartment'\nBY 'girl'\nFROM 'youtube'
+SELECT 'dance'\nON 'stage'\nBY 'dancer'\nFROM 'youtube'
+SELECT 'skating'\nON 'rink'\nHAVING TAG 'snow'\nFROM 'youtube'

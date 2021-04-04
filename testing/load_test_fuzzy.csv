@@ -1,0 +1,5 @@
+﻿query
+SELECT 'dace~'\nON 'stage'\nFROM 'youtube'
+SELECT 'cha*'\nAT 's*'\nBY 'ch*'\nFROM 'youtube'
+SELECT '*'\nBY 'ban*'\nFROM 'youtube'
+SELECT 'throwing*'\nAT 'gr*'\nFROM 'youtube'

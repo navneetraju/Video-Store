@@ -1,27 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: metadata_app_deployment
+  name: metadata-app-deployment
 spec:
+  replicas: 3
   selector:
     matchLabels:
-      app: metadata_app
+      app: metadata-app
   template:
     metadata:
       labels:
-        app: metadata_app
+        app: metadata-app
     spec:
       containers:
-      - name: metadata_react_app
+      - name: metadata-react-app
         image: navneetraju/metadata_store:metadata_app
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
         - containerPort: 80
+        imagePullPolicy: Always
+      imagePullSecrets:
+        - name: regcred
+        
 
---- 
+---
 
 apiVersion: v1
 kind: Service
@@ -29,7 +30,8 @@ metadata:
   name: metadata-app-service
 spec:
   selector:
-    app: metadata_app
+    app: metadata-app
   ports:
-  - port: 8000
-    targetPort: 80
+  - port: 80
+    nodePort: 8000
+  type: NodePort
