@@ -74,7 +74,7 @@ core:
   #   memory: 512Mi
 
   standalone: false
-  numberOfServers: 3
+  numberOfServers: 5
   persistentVolume:
     ## whether or not persistence is enabled
     ##
