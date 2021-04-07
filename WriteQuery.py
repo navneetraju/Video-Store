@@ -42,3 +42,9 @@ class WriteQuery:
             if session is not None:
                 session.close()
         return self.__tojson(response)
+
+    def __tojson(self, result):
+        jsonArray = list()
+        for i in result:
+            jsonArray.append(dict(i))
+        return jsonArray 
