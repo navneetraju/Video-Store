@@ -12,27 +12,27 @@ data:
   NEO4J_ACCEPT_LICENSE_AGREEMENT: "yes"
   NEO4J_dbms_mode: CORE
   NEO4JLABS_PLUGINS: '["graph-data-science"]'
-  mygraph_neo4j_core_0_NEO4J_dbms_default__advertised__address: 127.0.0.1
-  mygraph_neo4j_core_0_NEO4J_dbms_connector_bolt_advertised__address: 127.0.0.1:30001
-  mygraph_neo4j_core_0_NEO4J_dbms_connector_http_advertised__address: 127.0.0.1:30002
-  mygraph_neo4j_core_0_NEO4J_dbms_connector_https_advertised__address: 127.0.0.1:30003
+  mygraph_neo4j_core_0_NEO4J_dbms_default__advertised__address: 10.10.1.146
+  mygraph_neo4j_core_0_NEO4J_dbms_connector_bolt_advertised__address: 10.10.1.146:30001
+  mygraph_neo4j_core_0_NEO4J_dbms_connector_http_advertised__address: 10.10.1.146:30002
+  mygraph_neo4j_core_0_NEO4J_dbms_connector_https_advertised__address: 10.10.1.146:30003
 
-  mygraph_neo4j_core_1_NEO4J_dbms_default__advertised__address: 127.0.0.1
-  mygraph_neo4j_core_1_NEO4J_dbms_connector_bolt_advertised__address: 127.0.0.1:30004
-  mygraph_neo4j_core_1_NEO4J_dbms_connector_http_advertised__address: 127.0.0.1:30005
-  mygraph_neo4j_core_1_NEO4J_dbms_connector_https_advertised__address: 127.0.0.1:30006
+  mygraph_neo4j_core_1_NEO4J_dbms_default__advertised__address: 10.10.1.146
+  mygraph_neo4j_core_1_NEO4J_dbms_connector_bolt_advertised__address: 10.10.1.146:30004
+  mygraph_neo4j_core_1_NEO4J_dbms_connector_http_advertised__address: 10.10.1.146:30005
+  mygraph_neo4j_core_1_NEO4J_dbms_connector_https_advertised__address: 10.10.1.146:30006
   
-  mygraph_neo4j_core_2_NEO4J_dbms_default__advertised__address: 127.0.0.1
-  mygraph_neo4j_core_2_NEO4J_dbms_connector_bolt_advertised__address: 127.0.0.1:30007
-  mygraph_neo4j_core_2_NEO4J_dbms_connector_http_advertised__address: 127.0.0.1:30008
-  mygraph_neo4j_core_2_NEO4J_dbms_connector_https_advertised__address: 127.0.0.1:30009
+  mygraph_neo4j_core_2_NEO4J_dbms_default__advertised__address: 10.10.1.146
+  mygraph_neo4j_core_2_NEO4J_dbms_connector_bolt_advertised__address: 10.10.1.146:30007
+  mygraph_neo4j_core_2_NEO4J_dbms_connector_http_advertised__address: 10.10.1.146:30008
+  mygraph_neo4j_core_2_NEO4J_dbms_connector_https_advertised__address: 10.10.1.146:30009
 
-  mygraph_neo4j_core_3_NEO4J_dbms_default__advertised__address: 127.0.0.1
-  mygraph_neo4j_core_3_NEO4J_dbms_connector_bolt_advertised__address: 127.0.0.1:30010
-  mygraph_neo4j_core_3_NEO4J_dbms_connector_http_advertised__address: 127.0.0.1:30011
-  mygraph_neo4j_core_3_NEO4J_dbms_connector_https_advertised__address: 127.0.0.1:30012
+  mygraph_neo4j_core_3_NEO4J_dbms_default__advertised__address: 10.10.1.146
+  mygraph_neo4j_core_3_NEO4J_dbms_connector_bolt_advertised__address: 10.10.1.146:30010
+  mygraph_neo4j_core_3_NEO4J_dbms_connector_http_advertised__address: 10.10.1.146:30011
+  mygraph_neo4j_core_3_NEO4J_dbms_connector_https_advertised__address: 10.10.1.146:30012
 
-  mygraph_neo4j_core_4_NEO4J_dbms_default__advertised__address: 127.0.0.1
-  mygraph_neo4j_core_4_NEO4J_dbms_connector_bolt_advertised__address: 127.0.0.1:30013
-  mygraph_neo4j_core_4_NEO4J_dbms_connector_http_advertised__address: 127.0.0.1:30014
-  mygraph_neo4j_core_4_NEO4J_dbms_connector_https_advertised__address: 127.0.0.1:30015
+  mygraph_neo4j_core_4_NEO4J_dbms_default__advertised__address: 10.10.1.146
+  mygraph_neo4j_core_4_NEO4J_dbms_connector_bolt_advertised__address: 10.10.1.146:30013
+  mygraph_neo4j_core_4_NEO4J_dbms_connector_http_advertised__address: 10.10.1.146:30014
+  mygraph_neo4j_core_4_NEO4J_dbms_connector_https_advertised__address: 10.10.1.146:30015
