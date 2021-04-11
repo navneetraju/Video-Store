@@ -20,7 +20,7 @@ class Handler:
         self.parserObj = parse.Parser()
         self.queryProcessor = dataparsing.DataParser()
 
-    def query(self,requestQuery:str,fuzzy:bool):
+    async def query(self,requestQuery:str,fuzzy:bool):
         logging.info("Recieved query request, starting handling...")
         if requestQuery == None or len(requestQuery) == 0:
             return {"code":400,"message":"Invalid request query"}
@@ -47,15 +47,13 @@ class Handler:
             result = None
             if fuzzy:
                 logging.info("Starting fuzzy query")
-                result = self.queryProcessor.fuzzyQuery(parsedDictionary)
+                result = self.queryProcessor.fuzzyQuery(json.dumps(parsedDictionary))
             else:
                 logging.info("Starting simple query")
-                result = self.queryProcessor.query(parsedDictionary)
+                result = self.queryProcessor.query(json.dumps(parsedDictionary))
             return result
 
 
-'''
-For reference only
 
 if __name__ == "__main__":
     handler = Handler()
@@ -70,4 +68,3 @@ if __name__ == "__main__":
                 user_writing.append(line) 
         user_writing = '\n'.join(user_writing) 
         print(handler.query(user_writing,True))
-'''

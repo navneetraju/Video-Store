@@ -1,4 +1,6 @@
 import os, sys
+from functools import lru_cache
+import functools
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
@@ -12,14 +14,16 @@ import json
 from Exceptions import *
 import logging
 logging.basicConfig(format='%(asctime)s %(message)s',level=properties.LOG_LEVEL)
-
+from cache import timed_lru_cache
 
 class DataParser:
     def __init__(self):
         self.conn = Neo4jConnection(uri=properties.NEO4J_SERVER_URL, user=properties.NEO4J_SERVER_USERNAME, pwd=properties.NEO4J_SERVER_PASSWORD)
         self.youtubeAPI = YoutubeDataAPI()
 
-    def query(self,queryRequest:dict):
+    @timed_lru_cache(300)
+    def query(self,queryRequest):
+        queryRequest = json.loads(queryRequest)
         logging.info("Received simple query ...")
         requestDictionary = queryRequest[Constants.PARSED_DICT]
         neo4j_query = self.__generateNeo4jQuery(requestDictionary)
@@ -37,7 +41,9 @@ class DataParser:
             return {"code":500,"message":"Failed to query Neo4J Database: "+ str(e)}
         return {"code":200,"response":self.__postProcessResult(res)}
     
-    def fuzzyQuery(self,queryRequest:dict):
+    @timed_lru_cache(300)
+    def fuzzyQuery(self,queryRequest):
+        queryRequest = json.loads(queryRequest)
         logging.info("Received fuzzy query ...")
         requestDictionary = queryRequest[Constants.PARSED_DICT]
         neo4j_fuzzy_query = self.__generateNeo4jFuzzyQuery(requestDictionary)

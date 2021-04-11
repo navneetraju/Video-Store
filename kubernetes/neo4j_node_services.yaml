@@ -145,3 +145,32 @@ spec:
   selector:
     statefulset.kubernetes.io/pod-name: mygraph-neo4j-core-4
   type: NodePort
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: core
+    app.kubernetes.io/instance: mygraph
+    app.kubernetes.io/managed-by: Helm
+  name: neo4j-nodeport-service
+spec:
+  ports:
+  - name: bolt
+    port: 7687
+    protocol: TCP
+    nodePort: 7687
+  - name: http
+    port: 7474
+    protocol: TCP
+    nodePort: 7474
+  - name: https
+    port: 7473
+    protocol: TCP
+    nodePort: 7473
+  selector:
+    app.kubernetes.io/component: core
+    app.kubernetes.io/instance: mygraph
+  type: NodePort

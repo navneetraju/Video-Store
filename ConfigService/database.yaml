@@ -1,0 +1,27 @@
+database: youtube
+datasets:
+  - 
+    name: HVU-Dataset
+    ingestionType: All
+    mappings:
+      type: SingleColumn
+      SingleColumnName: Tags
+      delimiter: '|'
+      categoryMappingName: HVU_Tags_Categories_V1.0
+      temporal:
+        type: frame
+        temporal_start: time_start 
+        temporal_end: time_end 
+      unique_id: youtube_id
+  - 
+    name: SomeDataset
+    ingestionType: All
+    mappings:
+      type: MultiColumn
+      Experiential: action
+      Informational: object
+      temporal:
+        type: frame
+        temporal_start: time_start 
+        temporal_end: time_end 
+      unique_id: youtube_id

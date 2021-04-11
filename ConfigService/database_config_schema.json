@@ -1,0 +1,208 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "required": [
+        "database",
+        "datasets"
+    ],
+    "properties": {
+        "database": {
+            "$id": "#/properties/database",
+            "type": "string",
+            "title": "The database schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": ""
+        },
+        "datasets": {
+            "$id": "#/properties/datasets",
+            "type": "array",
+            "title": "The datasets schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/datasets/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/datasets/items/anyOf/0",
+                        "type": "object",
+                        "title": "The first anyOf schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": {},
+                        "required": [
+                            "name",
+                            "ingestionType",
+                            "mappings"
+                        ],
+                        "properties": {
+                            "name": {
+                                "$id": "#/properties/datasets/items/anyOf/0/properties/name",
+                                "type": "string",
+                                "title": "The name schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "HVU-Dataset"
+                                ]
+                            },
+                            "ingestionType": {
+                                "$id": "#/properties/datasets/items/anyOf/0/properties/ingestionType",
+                                "type": "string",
+                                "title": "The ingestionType schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "All"
+                                ]
+                            },
+                            "mappings": {
+                                "$id": "#/properties/datasets/items/anyOf/0/properties/mappings",
+                                "type": "object",
+                                "title": "The mappings schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": {},
+                                "examples": [
+                                    {
+                                        "type": "SingleColumn",
+                                        "SingleColumnName": "Tags",
+                                        "delimiter": "|",
+                                        "categoryMappingName": "HVU_Tags_Categories_V1.0",
+                                        "temporal": {
+                                            "type": "frame",
+                                            "temporal_start": "time_start",
+                                            "temporal_end": "time_end"
+                                        },
+                                        "unique_id": "youtube_id"
+                                    }
+                                ],
+								"if": {
+									"properties": {"type":{"const":"SingleColumn"}}
+								},
+								"then": {
+									"required": ["SingleColumnName","delimiter","categoryMappingName"]
+								},
+                                "required": [
+                                    "type",
+                                    "temporal",
+                                    "unique_id"
+                                ],
+                                "properties": {
+                                    "type": {
+                                        "$id": "#/properties/datasets/items/anyOf/0/properties/mappings/properties/type",
+                                        "type": "string",
+                                        "title": "The type schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                      	"enum": ["SingleColumn","MultiColumn"],
+                                        "examples": [
+                                            "SingleColumn"
+                                        ]
+                                    },
+                                    "SingleColumnName": {
+                                        "$id": "#/properties/datasets/items/anyOf/0/properties/mappings/properties/SingleColumnName",
+                                        "type": "string",
+                                        "title": "The SingleColumnName schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "Tags"
+                                        ]
+                                    },
+                                    "delimiter": {
+                                        "$id": "#/properties/datasets/items/anyOf/0/properties/mappings/properties/delimiter",
+                                        "type": "string",
+                                        "title": "The delimiter schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "|"
+                                        ]
+                                    },
+                                    "categoryMappingName": {
+                                        "$id": "#/properties/datasets/items/anyOf/0/properties/mappings/properties/categoryMappingName",
+                                        "type": "string",
+                                        "title": "The categoryMappingName schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "HVU_Tags_Categories_V1.0"
+                                        ]
+                                    },
+                                    "temporal": {
+                                        "$id": "#/properties/datasets/items/anyOf/0/properties/mappings/properties/temporal",
+                                        "type": "object",
+                                        "title": "The temporal schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": {},
+                                        "examples": [
+                                            {
+                                                "type": "frame",
+                                                "temporal_start": "time_start",
+                                                "temporal_end": "time_end"
+                                            }
+                                        ],
+                                        "required": [
+                                            "type",
+                                            "temporal_start",
+                                            "temporal_end"
+                                        ],
+                                        "properties": {
+                                            "type": {
+                                                "$id": "#/properties/datasets/items/anyOf/0/properties/mappings/properties/temporal/properties/type",
+                                                "type": "string",
+                                                "title": "The type schema",
+                                                "description": "An explanation about the purpose of this instance.",
+                                                "default": "",
+                                                "examples": [
+                                                    "frame"
+                                                ]
+                                            },
+                                            "temporal_start": {
+                                                "$id": "#/properties/datasets/items/anyOf/0/properties/mappings/properties/temporal/properties/temporal_start",
+                                                "type": "string",
+                                                "title": "The temporal_start schema",
+                                                "description": "An explanation about the purpose of this instance.",
+                                                "default": "",
+                                                "examples": [
+                                                    "time_start"
+                                                ]
+                                            },
+                                            "temporal_end": {
+                                                "$id": "#/properties/datasets/items/anyOf/0/properties/mappings/properties/temporal/properties/temporal_end",
+                                                "type": "string",
+                                                "title": "The temporal_end schema",
+                                                "description": "An explanation about the purpose of this instance.",
+                                                "default": "",
+                                                "examples": [
+                                                    "time_end"
+                                                ]
+                                            }
+                                        },
+                                        "additionalProperties": true
+                                    },
+                                    "unique_id": {
+                                        "$id": "#/properties/datasets/items/anyOf/0/properties/mappings/properties/unique_id",
+                                        "type": "string",
+                                        "title": "The unique_id schema",
+                                        "description": "An explanation about the purpose of this instance.",
+                                        "default": "",
+                                        "examples": [
+                                            "youtube_id"
+                                        ]
+                                    }
+                                },
+                                "additionalProperties": true
+                            }
+                        },
+                        "additionalProperties": true
+                    }
+                ]
+            }
+        }
+    },
+    "additionalProperties": true
+}

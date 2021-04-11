@@ -6,7 +6,7 @@ kubectl create -f custom-replica-configmap.yaml
 ```
 Install helm package with custom values
 ```
-helm install mygraph https://github.com/neo4j-contrib/neo4j-helm/releases/download/4.2.2-1/neo4j-4.2.2-1.tgz --set acceptLicenseAgreement=yes --set neo4jPassword=mySecretPassword -f .\value.yaml
+sudo helm --namespace=neo4j install mygraph https://github.com/neo4j-contrib/neo4j-helm/releases/download/4.2.2-1/neo4j-4.2.2-1.tgz --set acceptLicenseAgreement=yes --set neo4jPassword=mySecretPassword -f ./value.yaml
 ```
 Port-forward leader node:
 ```

@@ -42,8 +42,8 @@ async def main(fuzzy: str,request: Item,response: Response, status_code=200):
         return  json.dumps({'msg': 'Missing JSON'}),400
     handlerResponse = None
     if val:
-        handlerResponse = handler.query(input_query.query,True)
+        handlerResponse = await handler.query(input_query.query,True)
     else:
-        handlerResponse = handler.query(input_query.query,False)
+        handlerResponse = await handler.query(input_query.query,False)
     response.status_code = int(handlerResponse['code'])
     return handlerResponse

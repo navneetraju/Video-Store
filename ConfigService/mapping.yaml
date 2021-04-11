@@ -1,0 +1,12 @@
+categoryMappings:
+  name: HVU_Tags_Categories_V1.0
+  type: CSV 
+  tag: Tag 
+  category: Category
+  eventModelMapping:
+    action: Experiential 
+    object: Informational 
+    scene: Spatial 
+    attribute: Informational 
+    concept: Ignore 
+    event: Experiential
