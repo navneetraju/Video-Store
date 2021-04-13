@@ -10,9 +10,9 @@ class QueryEngine:
     def __init__(self):
         self.conn = Neo4jConnection(uri=properties.NEO4J_SERVER_URL, user=properties.NEO4J_SERVER_USERNAME, pwd=properties.NEO4J_SERVER_PASSWORD)
 
-    def get_recommendation(self,videoId,start_frame,end_frame,dbName):
+    def get_recommendation(self,videoId,dbName):
 
-        recommendation_query = Constants.NEO4J_RECOMMENDATION_QUERY(videoId,start_frame, end_frame)
+        recommendation_query = Constants.NEO4J_RECOMMENDATION_QUERY(videoId)
 
         try:
             results =  self.conn.query(recommendation_query,db=dbName)
