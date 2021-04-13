@@ -1,35 +1,53 @@
 def NEO4J_NODE_VIDEO(json):
-    return "MERGE (video:Video {video_id : \""+ json["video_id"] + "\", Location: \"" + json["Location"] + "\", video_url: \"" + json["video_url"]+ "\"})"
-    
+    return "MERGE (video:Video {video_id : \"" + json["video_id"] + "\", Location: \"" + json[
+        "Location"] + "\", video_url: \"" + json["video_url"] + "\"})"
+
+
 def NEO4J_NODE_TEMPORAL(json):
-    return "MERGE (temporal:Temporal {video_id : \""+ json["video_id"] +"\", start_frame: \"" + json["start_frame"] + "\", end_frame: \"" + json["end_frame"] + "\"})"
+    return "MERGE (temporal:Temporal {video_id : \"" + json["video_id"] + "\", start_frame: \"" + json[
+        "start_frame"] + "\", end_frame: \"" + json["end_frame"] + "\"})"
+
 
 def NEO4J_NODE_SPATIAL(json):
     return "MERGE (spatial:Spatial {place : \"" + json["place"] + "\"})"
 
+
 def NEO4J_NODE_INFORMATIONAL(json):
     return "MERGE (info:Informational {information : \"" + json["information"] + "\"})"
+
 
 def NEO4J_NODE_EXPERIENTIAL(json):
     return "MERGE (event:Experiential {event : \"" + json["event"] + "\"})"
 
+
 def NEO4J_SIMPLE_EVENT(event):
-    return "(:Experiential{event:" + "\"{}\"".format(event) + "})-[:DURING]->(temporal:Temporal)-[:IS_PART_OF]->(video:Video)"
+    return "(:Experiential{event:" + "\"{}\"".format(
+        event) + "})-[:DURING]->(temporal:Temporal)-[:IS_PART_OF]->(video:Video)"
+
 
 def NEO4J_SIMPLE_INFORMATION(information):
-    return "(:Infromational{information:" + "\"{}\"".format(information) + "})-[:PRESENT]->(temporal:Temporal)-[:IS_PART_OF]->(video:Video)"
+    return "(:Infromational{information:" + "\"{}\"".format(
+        information) + "})-[:PRESENT]->(temporal:Temporal)-[:IS_PART_OF]->(video:Video)"
+
 
 def NEO4J_SIMPLE_SPATIAL(spatial):
     return "(:Spatial{place:" + "\"{}\"".format(spatial) + "})-[:AT]->(temporal:Temporal)-[:IS_PART_OF]->(video:Video)"
 
-def NEO4J_INFORMATION_INDEX(informationQuery,indexNum):
-    return "CALL db.index.fulltext.queryNodes('informationalIndex'," + "\"{}\"".format(informationQuery) + ") YIELD node as info, score as s"+str(indexNum)
 
-def NEO4J_EXPERIENTIAL_INDEX(informationQuery,indexNum):
-    return "CALL db.index.fulltext.queryNodes('ExperentialIndex'," + "\"{}\"".format(informationQuery) + ") YIELD node as event, score as s"+str(indexNum)
+def NEO4J_INFORMATION_INDEX(informationQuery, indexNum):
+    return "CALL db.index.fulltext.queryNodes('informationalIndex'," + "\"{}\"".format(
+        informationQuery) + ") YIELD node as info, score as s" + str(indexNum)
 
-def NEO4J_SPATIAL_INDEX(informationQuery,indexNum):
-    return "CALL db.index.fulltext.queryNodes('spatialIndex'," + "\"{}\"".format(informationQuery) + ") YIELD node as spatial, score as s"+str(indexNum)
+
+def NEO4J_EXPERIENTIAL_INDEX(informationQuery, indexNum):
+    return "CALL db.index.fulltext.queryNodes('ExperentialIndex'," + "\"{}\"".format(
+        informationQuery) + ") YIELD node as event, score as s" + str(indexNum)
+
+
+def NEO4J_SPATIAL_INDEX(informationQuery, indexNum):
+    return "CALL db.index.fulltext.queryNodes('spatialIndex'," + "\"{}\"".format(
+        informationQuery) + ") YIELD node as spatial, score as s" + str(indexNum)
+
 
 def NEO4J_FUZZY_SCORE_AGGR(numIndexes):
     res = ""
@@ -38,8 +56,9 @@ def NEO4J_FUZZY_SCORE_AGGR(numIndexes):
     return res[:-1] + " as score"
 
 
-def NEO4J_RECOMMENDATION_QUERY(videoid):
-    return "MATCH (p1:Temporal {video_id: '"+videoid+"'})-[:PRESENT|:AT|:DURING]->(info1) WITH p1, collect(id(info1)) AS p1Info1 MATCH (p2:Temporal)-[:PRESENT|:AT|:DURING]->(info2) WHERE p1 <> p2 WITH p1, p1Info1, p2, collect(id(info2)) AS p2Info2 RETURN p1.video_id AS from, p2.video_id AS to, gds.alpha.similarity.jaccard(p1Info1, p2Info2) AS similarity, p1,p2 ORDER BY similarity DESC LIMIT 5"
+def NEO4J_RECOMMENDATION_QUERY(videoid, start, end):
+    return "MATCH (p1:Temporal {video_id: '" + videoid + "'})-[:PRESENT|:AT|:DURING]->(info1) WHERE p1.start_frame='" + start + "' AND p1.end_frame='" + end + "' WITH p1, collect(id(info1)) AS p1Info1 MATCH (p2:Temporal)-[:PRESENT|:AT|:DURING]->(info2) WHERE p1 <> p2 WITH p1, p1Info1, p2, collect(id(info2)) AS p2Info2 RETURN p1.video_id AS from, p2.video_id AS to, gds.alpha.similarity.jaccard(p1Info1, p2Info2) AS similarity, p1,p2 ORDER BY similarity DESC LIMIT 5"
+
 
 INSERT = "INSERT"
 SELECT = "SELECT"
@@ -68,24 +87,24 @@ AND = "AND"
 NEO4J_NODE_MAPPING = {
     "event": EXPERENTIAL,
     "spatial": SPATIAL,
-    "temporal" : TEMPORAL,
+    "temporal": TEMPORAL,
     "causality": CAUSALITY,
     "informational": INFORMATIONAL
 }
 
 NEO4J_NODE_NAMES = {
-	EXPERENTIAL: "event",
-	SPATIAL: "spatial",
-	TEMPORAL: "temporal",
-	CAUSALITY: "cause",
-	INFORMATIONAL: "info",
-	VIDEO: "video"
+    EXPERENTIAL: "event",
+    SPATIAL: "spatial",
+    TEMPORAL: "temporal",
+    CAUSALITY: "cause",
+    INFORMATIONAL: "info",
+    VIDEO: "video"
 }
 
 NEO4J_NODE_TYPE_MAPPING = {
     EXPERENTIAL: "(event:Experiential)",
     SPATIAL: "(spatial:Spatial)",
-    TEMPORAL : "(temporal:Temporal)",
+    TEMPORAL: "(temporal:Temporal)",
     CAUSALITY: "(cause:Causality)",
     INFORMATIONAL: "(info:Infromational)",
     VIDEO: "(video:Video)"
@@ -119,6 +138,5 @@ NEO4J_RELATIONSHIPS = {
     SPATIAL: "(spatial)-[:AT]->(temporal:Temporal)",
     TEMPORAL: "(temporal)-[:IS_PART_OF]->(video:Video)"
 }
-
 
 YOUTUBE_DATA_API_BASE_PATH = "https://www.googleapis.com/youtube/v3/videos?id={}&key={}&part=contentDetails"
