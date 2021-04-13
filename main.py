@@ -3,13 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import json
 from Handler import Handler
-
-
+from typing import Optional
+from RecommendationEngine import engine
 class Item(BaseModel):
     query: str
 
 handler = Handler()
 app = FastAPI()
+query_engine=engine.QueryEngine()
 
 origins = [
     "http://localhost.tiangolo.com",
@@ -47,3 +48,14 @@ async def main(fuzzy: str,request: Item,response: Response, status_code=200):
         handlerResponse = await handler.query(input_query.query,False)
     response.status_code = int(handlerResponse['code'])
     return handlerResponse
+
+
+#@app.get("")
+
+@app.get("/api/recommend/{video_id}/{db_name}")
+async def recommend(video_id: str, db_name: str, start: Optional[str] = None, end: Optional[str] = None):
+    if start and end:
+        recommended_list = query_engine.get_recommendation(video_id,start,end,db_name)
+        return {'videos':recommended_list},200
+    else:
+        return json.dumps({'msg': 'Missing JSON'}),400
