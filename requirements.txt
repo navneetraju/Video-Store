@@ -2,3 +2,7 @@ neo4j
 requests
 pyparsing
 rdflib
+confluent-kafka
+pandas
+pymongo
+python-multipart
