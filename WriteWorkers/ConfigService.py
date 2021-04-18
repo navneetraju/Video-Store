@@ -35,7 +35,7 @@ class ConfigService:
 		mapppingResponse = requests.get(properties.CONFIG_SERVICE_MAPPING_URL.format(mappingName))
 		res = dict()
 		if mapppingResponse.status_code == 500:
-			logging.error("ConfigService error while fetching database config")
+			logging.error("ConfigService error while fetching the mapping config")
 			res['status'] = 500
 			res['mapping'] = None 
 			return res

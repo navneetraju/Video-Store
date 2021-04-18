@@ -6,22 +6,26 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 import properties
 import logging
-from Neo4jConnection import Neo4jConnection
+# from Neo4jConnection import Neo4jConnection
+from WriteWorkers import connect_db
 logging.basicConfig(format='%(asctime)s %(message)s',level=properties.LOG_LEVEL)
 
 class WriteQuery:
-    def __init__(self, uri, user, pwd):
+    def __init__(self, uri, user, pwd, dbName):
         # self.conn = Neo4jConnection(uri=properties.NEO4J_SERVER_URL, user=properties.NEO4J_SERVER_USERNAME, pwd=properties.NEO4J_SERVER_PASSWORD)
         self.__uri = uri
         self.__user = user
         self.__pwd = pwd
         self.__driver = None
+        self.dbName = dbName
         try:
             logging.info("Initializing Neo4J connection..")
             self.__driver = GraphDatabase.driver(self.__uri, auth=(self.__user, self.__pwd))
+            
         except Exception as e:
             logging.error("Failed to create the driver",exc_info=True)
         logging.info("Successfully initialized NEO4J Database connection")
+        connect_db.Connect_DB(self.dbName)
 
     def write_query(self, query, db=None, json_obj=None):
         assert self.__driver is not None, "Driver not initialized!"

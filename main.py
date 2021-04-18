@@ -88,6 +88,7 @@ async def jsonDataInsertion(request: Request):
     jobID = uuid.uuid1()
     jobID = str(jobID)
     resp = importHandler.writeJSON(body,jobID)
+    # return {"message":resp["message"],"jobID":jobID}
     if resp['status'] == 202:
         return {"message":resp["message"],"jobID":jobID}
     else:

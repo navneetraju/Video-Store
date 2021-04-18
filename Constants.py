@@ -4,8 +4,8 @@ def NEO4J_NODE_VIDEO(json):
 
 
 def NEO4J_NODE_TEMPORAL(json):
-    return "MERGE (temporal:Temporal {video_id : \"" + json["video_id"] + "\", start_frame: \"" + json[
-        "start_frame"] + "\", end_frame: \"" + json["end_frame"] + "\"})"
+    return "MERGE (temporal:Temporal {video_id : \"" + json["video_id"] + "\", start_frame: \"" + str(json[
+        "start_frame"]) + "\", end_frame: \"" + str(json["end_frame"]) + "\"})"
 
 
 def NEO4J_NODE_SPATIAL(json):
