@@ -26,11 +26,14 @@ class ImportHandler:
         first = True
         for index, row in df.iterrows():
             insertionData = dict()
+            insertionData['ingestionType'] = 'CSV'
             if first:
                 insertionData['first'] = True 
+                insertionData['last'] = False
                 first = False
             elif index == numRows - 1:
                 insertionData['last'] = True 
+                insertionData['first'] = False
             else:
                 insertionData['last'] = False
                 insertionData['first'] = False 
@@ -54,6 +57,7 @@ class ImportHandler:
         logging.info("Recieved JSON job {}".format(jobID))
         self.jobTracker.markPushingJob(jobID,"JSON Request RECEIVED")
         jsonRequest['jobID'] = jobID
+        jsonRequest['ingestionType'] = 'API'
         jobStatus,message = self.kafkaProducer.writeToTopic(jsonRequest,jobID)
         if jobStatus == "SUCCESS":
             logging.info("Data pushed for JSON, jobId: {}".format(jobID))
