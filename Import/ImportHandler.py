@@ -6,7 +6,6 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 from KafkaProducer.Producer import KafkaProducer
-from KafkaConsumer.Consumer import KafkaConsumer
 from Import.JobTracker import JobTracker
 import properties
 import logging
@@ -16,7 +15,6 @@ class ImportHandler:
     def __init__(self):
         self.kafkaProducer = KafkaProducer('10.10.1.146:9092','test')
         self.jobTracker = JobTracker()
-        
 
     def writeCSV(self,csvFile,database,dataset,jobID):
         logging.info("Recieved CSV job {}, starting parsing".format(jobID))
@@ -34,8 +32,8 @@ class ImportHandler:
                 insertionData['last'] = False
                 first = False
             elif index == numRows - 1:
-                insertionData['last'] = True
-                insertionData['first'] = False 
+                insertionData['last'] = True 
+                insertionData['first'] = False
             else:
                 insertionData['last'] = False
                 insertionData['first'] = False 
@@ -54,7 +52,6 @@ class ImportHandler:
         elif jobStatus == "ERROR":
             logging.error("Error pushing CSV data for jobId: {}".format(jobID))
             self.jobTracker.markPushingJob(jobID,"ERROR IN PUSHING DATA: {}".format(message))
-        KafkaConsumer('10.10.1.146:9092','test', jobID)
     
     def writeJSON(self,jsonRequest,jobID):
         logging.info("Recieved JSON job {}".format(jobID))
@@ -65,20 +62,12 @@ class ImportHandler:
         if jobStatus == "SUCCESS":
             logging.info("Data pushed for JSON, jobId: {}".format(jobID))
             self.jobTracker.markPushingJob(jobID,"DATA PUSHED INTO KAFKA")
-            # return {"status":202,"message":"Successfully pushed data into topic"}
+            return {"status":202,"message":"Successfully pushed data into topic"}
         elif jobStatus == "ERROR":
             logging.error("Error pushing JSON data for jobId: {}".format(jobID))
             self.jobTracker.markPushingJob(jobID,"ERROR IN PUSHING DATA: {}".format(message))
-            # return {"status":400,"message":str(message)}
+            return {"status":400,"message":str(message)}
         else:
-            logging.error("Server Error")
-            self.jobTracker.markPushingJob(jobID, "Server Error")
-            # return {"status":500,"message":str(message)}
-        KafkaConsumer('10.10.1.146:9092','test', jobID)
-        self.jobTracker.markPushingJob(jobID,"Data consumed successfully: {}".format(message))
-
+            return {"status":500,"message":str(message)}
         
-
-if(__name__ == "__main__"):
-    importHandlerObj = ImportHandler()
-    importHandlerObj.writeCSV()
+        
