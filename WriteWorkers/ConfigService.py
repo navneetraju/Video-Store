@@ -14,6 +14,7 @@ class ConfigService:
 
 	@timed_lru_cache(600)
 	def getDatabaseConfig(self,database):
+		print("Config Service Database Config")
 		config = requests.get(properties.CONFIG_SERVICE_DB_URL.format(database))
 		res = dict()
 		if config.status_code == 500:

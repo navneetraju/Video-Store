@@ -3,7 +3,8 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
-from Neo4jConnection import Neo4jConnection
+from WriteWorkers.Neo4jConnection import Neo4jConnection
+# from WriteWorkers import WriteQuery
 import Constants
 import properties
 

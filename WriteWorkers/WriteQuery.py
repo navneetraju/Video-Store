@@ -27,13 +27,18 @@ class WriteQuery:
         logging.info("Successfully initialized NEO4J Database connection")
         connect_db.Connect_DB(self.dbName)
 
+    def execute(self, tx, query):
+        result = tx.run(query)
+        return result
+
     def write_query(self, query, db=None, json_obj=None):
         assert self.__driver is not None, "Driver not initialized!"
         session = None
         response = None
         try: 
             session = self.__driver.session(database=db) if db is not None else self.__driver.session() 
-            response = list(session.run(query, batch=json_obj))
+            # response = list(session.run(query, batch=json_obj))
+            response = list(session.write_transaction(self.execute, query))
         except Exception as e:
             if e.code == "Neo.ClientError.Database.DatabaseNotFound":
                 logging.error("Caught exception ",exc_info=True)

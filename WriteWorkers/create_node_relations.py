@@ -3,7 +3,7 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
-from Neo4jConnection import Neo4jConnection
+# from Neo4jConnection import Neo4jConnection
 import Constants
 import properties
 import logging
@@ -11,10 +11,10 @@ logging.basicConfig(format='%(asctime)s %(message)s',level=properties.LOG_LEVEL)
 
 
 class Node_Relations:
-    # def __init__(self, dbName):
-        # self.conn = Neo4jConnection(uri=properties.NEO4J_SERVER_URL, user=properties.NEO4J_SERVER_USERNAME, pwd=properties.NEO4J_SERVER_PASSWORD)
-        # self.dbName = dbName
 
+    def __init__(self):
+        print("Inside Create")
+    
     def combine_check_data(self, json1, json2, param1, param2):
         """
         json1 : entry_data[Constants.VIDEO]
@@ -22,6 +22,44 @@ class Node_Relations:
         param1 : Constants.NEO4J_NODE_NAMES[Constants.VIDEO]
         param2 : Constants.NEO4J_NODE_NAMES[Constants.TEMPORAL]
         """
+        if(param1 == Constants.NEO4J_NODE_NAMES[Constants.VIDEO]):
+            if(json1['video_id'][0].isdigit()):
+                json1['video_id'] = json1['video_id'][1:]
+            if(json1['video_id'][0].isdigit()):
+                json['video_id'] = json1['video_id'][1:]
+            param1 = json1['video_id'].replace("-", "")
+        if(param1 == Constants.NEO4J_NODE_NAMES[Constants.TEMPORAL]):
+            if(json1['video_id'][0].isdigit()):
+                json1['video_id'] = json1['video_id'][1:]
+            if(json1['video_id'][0].isdigit()):
+                json['video_id'] = json1['video_id'][1:]
+            param1 = json1['video_id'].replace("-", "") + str(int(json1['start_frame'])) + str(int(json1['end_frame']))
+        if(param1 == Constants.NEO4J_NODE_NAMES[Constants.INFORMATIONAL]):
+            param1 = json1['information']
+        if(param1 == Constants.NEO4J_NODE_NAMES[Constants.EXPERENTIAL]):
+            param1 = json1['event']
+        if(param1 == Constants.NEO4J_NODE_NAMES[Constants.SPATIAL]):
+            param1 = json1['place']
+
+        if(param2 == Constants.NEO4J_NODE_NAMES[Constants.VIDEO]):
+            if(json2['video_id'][0].isdigit()):
+                json2['video_id'] = json2['video_id'][1:]
+            if(json2['video_id'][0].isdigit()):
+                json2['video_id'] = json2['video_id'][1:]
+            param2 = json2['video_id'].replace("-", "")
+        if(param2 == Constants.NEO4J_NODE_NAMES[Constants.TEMPORAL]):
+            if(json2['video_id'][0].isdigit()):
+                json2['video_id'] = json2['video_id'][1:]
+            if(json2['video_id'][0].isdigit()):
+                json2['video_id'] = json2['video_id'][1:]
+            param2 = json2['video_id'].replace("-", "") + str(int(json2['start_frame'])) + str(int(json2['end_frame']))
+        if(param2 == Constants.NEO4J_NODE_NAMES[Constants.INFORMATIONAL]):
+            param2 = json2['information']
+        if(param2 == Constants.NEO4J_NODE_NAMES[Constants.EXPERENTIAL]):
+            param2 = json2['event']
+        if(param2 == Constants.NEO4J_NODE_NAMES[Constants.SPATIAL]):
+            param2 = json2['place']
+        # print("Check Combine Data ", param1, param2)
         res_string = ""
         for key in json1:
             res_string += param1 + "." + key + "=\'" + \
@@ -61,7 +99,7 @@ class Node_Relations:
             create_node_query = Constants.NEO4J_NODE_EXPERIENTIAL(json)
         if(node_name == Constants.NEO4J_NODE_NAMES[Constants.SPATIAL]):
             create_node_query = Constants.NEO4J_NODE_SPATIAL(json)
-        
+        # print("Create Query", create_node_query)
         return create_node_query + "\n"
         
 
@@ -74,6 +112,47 @@ class Node_Relations:
         node_mapping1 : Constants.NEO4J_NODE_TYPE_MAPPING[Constants.INFORMATIONAL]
         node_mapping2 : Constants.NEO4J_NODE_TYPE_MAPPING[Constants.TEMPORAL]
         """
+        # print("Onw Way json ". json1, json2)
+        if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.VIDEO]):
+            if(json1['video_id'][0].isdigit()):
+                json1['video_id'] = json1['video_id'][1:]
+            if(json1['video_id'][0].isdigit()):
+                json['video_id'] = json1['video_id'][1:]
+            node_name1 = json1['video_id'].replace("-", "")
+        if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.TEMPORAL]):
+            if(json1['video_id'][0].isdigit()):
+                json1['video_id'] = json1['video_id'][1:]
+            if(json1['video_id'][0].isdigit()):
+                json['video_id'] = json1['video_id'][1:]
+            node_name1 = json1['video_id'].replace("-", "") + str(int(json1['start_frame'])) + str(int(json1['end_frame']))
+        if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.INFORMATIONAL]):
+            node_name1 = json1['information']
+        if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.EXPERENTIAL]):
+            node_name1 = json1['event']
+        if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.SPATIAL]):
+            node_name1 = json1['place']
+
+        if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.VIDEO]):
+            if(json2['video_id'][0].isdigit()):
+                json2['video_id'] = json2['video_id'][1:]
+            if(json2['video_id'][0].isdigit()):
+                json2['video_id'] = json2['video_id'][1:]
+            node_name2 = json2['video_id'].replace("-", "")
+        if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.TEMPORAL]):
+            if(json2['video_id'][0].isdigit()):
+                json2['video_id'] = json2['video_id'][1:]
+            if(json2['video_id'][0].isdigit()):
+                json2['video_id'] = json2['video_id'][1:]
+            param2 = json2['video_id'].replace("-", "")
+            node_name2 = json2['video_id'].replace("-", "") + str(int(json2['start_frame'])) + str(int(json2['end_frame']))
+        if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.INFORMATIONAL]):
+            node_name2 = json2['information']
+        if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.EXPERENTIAL]):
+            node_name2 = json2['event']
+        if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.SPATIAL]):
+            node_name2 = json2['place']
+        
+        # print("One way relation ", node_name1, node_name2)
         data_after_where = self.combine_check_data(json1, json2, node_name1, node_name2)
         relation_forward = "MERGE (" + node_name1+ ")-[:" + node_relation + "]->(" + node_name2 + ")\n"
         return  relation_forward
@@ -93,7 +172,46 @@ class Node_Relations:
         node_relation : Constants.NEO4J_RELATIONSHIP_IT
         
         """
-        
+        # print("Two way json ", json1, json2)
+        if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.VIDEO]):
+            if(json1['video_id'][0].isdigit()):
+                json1['video_id'] = json1['video_id'][1:]
+            if(json1['video_id'][0].isdigit()):
+                json['video_id'] = json1['video_id'][1:]
+            node_name1 = json1['video_id'].replace("-", "")
+        if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.TEMPORAL]):
+            if(json1['video_id'][0].isdigit()):
+                json1['video_id'] = json1['video_id'][1:]
+            if(json1['video_id'][0].isdigit()):
+                json['video_id'] = json1['video_id'][1:]
+            node_name1 = json1['video_id'].replace("-", "") + str(int(json1['start_frame'])) + str(int(json1['end_frame']))
+        if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.INFORMATIONAL]):
+            node_name1 = json1['information']
+        if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.EXPERENTIAL]):
+            node_name1 = json1['event']
+        if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.SPATIAL]):
+            node_name1 = json1['place']
+        # print("Second Part")
+        if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.VIDEO]):
+            if(json2['video_id'][0].isdigit()):
+                json2['video_id'] = json2['video_id'][1:]
+            if(json2['video_id'][0].isdigit()):
+                json2['video_id'] = json2['video_id'][1:]
+            node_name2 = json2['video_id'].replace("-", "")
+        if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.TEMPORAL]):
+            if(json2['video_id'][0].isdigit()):
+                json2['video_id'] = json2['video_id'][1:]
+            if(json2['video_id'][0].isdigit()):
+                json2['video_id'] = json2['video_id'][1:]
+            node_name2 = json2['video_id'].replace("-", "") + str(int(json2['start_frame'])) + str(int(json2['end_frame']))
+        if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.INFORMATIONAL]):
+            node_name2 = json2['information']
+        if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.EXPERENTIAL]):
+            node_name2 = json2['event']
+        if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.SPATIAL]):
+            node_name2 = json2['place']
+
+        # print("two Way relation ", node_name1, node_name2)
         relation_forward = "MERGE (" + node_name1+ ")-[:" + node_relation + "]->(" + node_name2 + ")\n"  
         relation_backward = "MERGE (" + node_name2 + ")-[:" + node_relation + "]->(" + node_name1 + ")\n"
         logging.info("Creating Two Way Relationships...")

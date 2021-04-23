@@ -9,8 +9,9 @@ import logging
 from Import.JobTracker import JobTracker
 from WriteWorkers import create_node_relations
 from WriteWorkers.WriteQuery import WriteQuery
-from WriteWorkers.constraint_combine import Combine
+from WriteWorkers.Combine import Combine
 from WriteWorkers.Neo4jConnection import Neo4jConnection
+from WriteWorkers.ConfigService import ConfigService
 logging.basicConfig(format='%(asctime)s %(message)s',level=properties.LOG_LEVEL)
 import json
 import threading
@@ -61,46 +62,43 @@ class KafkaConsumer():
         json_obj = json.loads(msg.value().decode('utf-8'))
         database = json_obj["database"]
         dataset = json_obj["dataset"]
-        self.combine_obj = Combine(database)
-        response = requests.get(properties.CONFIG_SERVICE_DB_URL.format(database))
-        status = response.status_code
-        if(status == 400):
+        combine_obj = Combine(database)
+        # response = requests.get(properties.CONFIG_SERVICE_DB_URL.format(database))
+        response = ConfigService().getDatabaseConfig(database)
+        
+        if(response["status"] == 400):
             self.jobTracker.markPushingJob(self.jobID, "Configuration could not be found in the ConfigService")
             logging.error("Configuration could not be found in the ConfigService")
-        elif(status == 500):
+        elif(response["status"] == 500):
             self.jobTracker.markPushingJob(self.jobID, "ConfigService error while fetching database config")
             logging.error("ConfigService error while fetching database config")
-        elif(status == 200):
-            json_response = json.loads(response.text)
+        elif(response["status"] == 200):
+            json_response = response    
             # print("From Topic ", json_obj)
             # print("Database COnfig ", json_response)
             if('first' in json_obj and json_obj['first']):
                 self.jobTracker.markPushingJob(self.jobID, "Started Consuming the First chunk of data from Topic")
                 logging.error("Started Consuming the First chunk of data from Topic")
-            for val in json_response["datasets"]:
+            for val in json_response['config']["datasets"]:
                 if(dataset == val['name']):
                     # print("dataset matched")
                     final_query = ""
-                    if(val['mappings']['type'] == 'MultiColumn'):
-                        
-                        self.combine_obj.combine_multi(json_obj, val)
-                        
+                    if(val['mappings']['type'] == 'MultiColumn'): 
+                        combine_obj.combine_multi(json_obj, val)
                     else:
                         # print("Single Column")
                         
-                        resp = requests.get(properties.CONFIG_SERVICE_MAPPING_URL.format(val['mappings']['categoryMappingName']))
-                        status_code = resp.status_code
-                        if(status_code == 400):
+                        # resp = requests.get(properties.CONFIG_SERVICE_MAPPING_URL.format(val['mappings']['categoryMappingName']))
+                        resp = ConfigService().getCategoryMapping(val['mappings']['categoryMappingName'])
+                        
+                        if(resp["status"] == 400):
                             self.jobTracker.markPushingJob(self.jobID, "ConfigService could not find the mapping")
                             logging.error("ConfigService could not find the mapping")
-                        elif(status_code == 500):
+                        elif(resp["status"] == 500):
                             self.jobTracker.markPushingJob(self.jobID, "ConfigService error while fetching the mapping config")
                             logging.error("ConfigService error while fetching the mapping config")
-                        elif(status_code == 200):
-                            # singlecol_response = json.loads(resp)
-                            # print(singlecol_response)
-                            # print("Single Column Response", resp.text)
-                            self.combine_obj.combine_single(json_obj, json.loads(resp.text), val)
+                        elif(resp["status"] == 200):
+                            combine_obj.combine_single(json_obj, resp['mapping'], val)
                     break
            
             if('last' in json_obj and json_obj['last']):
@@ -123,28 +121,30 @@ class KafkaConsumer():
         c.subscribe([self.config['topic']])
         q = Queue(maxsize=self.config['num_threads'])
 
-        while True:
-            logging.info('#{} - Waiting for message...'.format(os.getpid()))
-            try:
-                msg = c.poll(60)
-                if msg is None:
-                    continue
-                if msg.error():
-                    logging.error('# {} - Consumer error: {}'.format(os.getpid(), msg.error()))
+        # while True:
+        logging.info('#{} - Waiting for message...'.format(os.getpid()))
+        try:
+            msg = c.poll(60)
+            if msg is None:
+                # continue
+                pass
+            if msg.error():
+                logging.error('# {} - Consumer error: {}'.format(os.getpid(), msg.error()))
 
-                    continue
-                q.put(msg)
-                # Use default daemon=False to stop threads gracefully in order to
-                # release resources properly.
-                t = threading.Thread(target=self._process_msg, args=(q, c))
-                t.start()
-                
-            except Exception:
-                logging.exception('# {} - Worker terminated.'.format(os.getpid()))
-                self.jobStatus = ERROR
-                self.flushReport = "Worker Terminated {}".format(os.getpid())
-                resp = (self.jobStatus, self.flushReport)
-                c.close()
+                # continue
+                pass
+            q.put(msg)
+            # Use default daemon=False to stop threads gracefully in order to
+            # release resources properly.
+            t = threading.Thread(target=self._process_msg, args=(q, c))
+            t.start()
+            
+        except Exception:
+            logging.exception('# {} - Worker terminated.'.format(os.getpid()))
+            self.jobStatus = ERROR
+            self.flushReport = "Worker Terminated {}".format(os.getpid())
+            resp = (self.jobStatus, self.flushReport)
+            c.close()
 
 
     def main(self, config):
@@ -158,11 +158,11 @@ class KafkaConsumer():
             if config['num_workers'] == num_alive:
                 continue
             # self.conn = Neo4jConnection(uri=properties.NEO4J_SERVER_URL, user=properties.NEO4J_SERVER_USERNAME, pwd=properties.NEO4J_SERVER_PASSWORD, dbName="youtube")
-            for _ in range(config['num_workers']-num_alive):
-                p = Process(target=self._consume, daemon=True, args=(config,))
-                p.start()
-                workers.append(p)
-                logging.info('Starting worker #%s', p.pid)
+            # for _ in range(config['num_workers']-num_alive):
+            p = Process(target=self._consume, daemon=True, args=(config,))
+            p.start()
+            workers.append(p)
+            logging.info('Starting worker #%s', p.pid)
 
 if(__name__ == "__main__"):
     KafkaConsumer('10.10.1.146:9092','test', "1234")
