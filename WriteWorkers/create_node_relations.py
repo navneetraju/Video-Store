@@ -26,13 +26,13 @@ class Node_Relations:
             if(json1['video_id'][0].isdigit()):
                 json1['video_id'] = json1['video_id'][1:]
             if(json1['video_id'][0].isdigit()):
-                json['video_id'] = json1['video_id'][1:]
+                json1['video_id'] = json1['video_id'][1:]
             param1 = json1['video_id'].replace("-", "")
         if(param1 == Constants.NEO4J_NODE_NAMES[Constants.TEMPORAL]):
             if(json1['video_id'][0].isdigit()):
                 json1['video_id'] = json1['video_id'][1:]
             if(json1['video_id'][0].isdigit()):
-                json['video_id'] = json1['video_id'][1:]
+                json1['video_id'] = json1['video_id'][1:]
             param1 = json1['video_id'].replace("-", "") + str(int(json1['start_frame'])) + str(int(json1['end_frame']))
         if(param1 == Constants.NEO4J_NODE_NAMES[Constants.INFORMATIONAL]):
             param1 = json1['information']
@@ -63,11 +63,11 @@ class Node_Relations:
         res_string = ""
         for key in json1:
             res_string += param1 + "." + key + "=\'" + \
-                    json1[key] + "\' AND "
+                    str(json1[key]) + "\' AND "
         n = len(json2)
         for key in json2:
             res_string += param2 + "." + key + "=\'" + \
-                json2[key] + "\'"
+                str(json2[key]) + "\'"
             n -= 1
             if(n >= 1):
                 res_string += " AND "
@@ -117,13 +117,13 @@ class Node_Relations:
             if(json1['video_id'][0].isdigit()):
                 json1['video_id'] = json1['video_id'][1:]
             if(json1['video_id'][0].isdigit()):
-                json['video_id'] = json1['video_id'][1:]
+                json1['video_id'] = json1['video_id'][1:]
             node_name1 = json1['video_id'].replace("-", "")
         if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.TEMPORAL]):
             if(json1['video_id'][0].isdigit()):
                 json1['video_id'] = json1['video_id'][1:]
             if(json1['video_id'][0].isdigit()):
-                json['video_id'] = json1['video_id'][1:]
+                json1['video_id'] = json1['video_id'][1:]
             node_name1 = json1['video_id'].replace("-", "") + str(int(json1['start_frame'])) + str(int(json1['end_frame']))
         if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.INFORMATIONAL]):
             node_name1 = json1['information']
@@ -153,6 +153,7 @@ class Node_Relations:
             node_name2 = json2['place']
         
         # print("One way relation ", node_name1, node_name2)
+        
         data_after_where = self.combine_check_data(json1, json2, node_name1, node_name2)
         relation_forward = "MERGE (" + node_name1+ ")-[:" + node_relation + "]->(" + node_name2 + ")\n"
         return  relation_forward

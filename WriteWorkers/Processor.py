@@ -16,6 +16,7 @@ from WriteWorkers.Connect_DB import Connect_DB
 from WriteWorkers.Operation import Operation
 from Import.JobTracker import JobTracker
 import properties
+import json
 
 
 class Processor(object):
@@ -24,7 +25,7 @@ class Processor(object):
             threading.current_thread().name)
         )
         print('Process: ',os.getpid())
-        print(name)
+        # print(name)
         result = tx.run(name)
         print(result.single())
         record = result.single()
@@ -41,14 +42,22 @@ class Processor(object):
             '#%sT%s - Received message: %s',
             os.getpid(), threading.get_ident(), msg.value().decode('utf-8')
         )
-        
-        with self.driver.session(database="youtube") as session:
-            # print("Going to Combine")
+        try:
             op_obj = Operation()
             query = op_obj.perform(msg)
-            # print("Finished Operation")
-            print(session.write_transaction(self.create_node_tx, query) )
-            print("WROTE TO NEO4j")
+        except Exception as e:
+            logging.error("Exception %s", e)
+            c.commit(msg)
+        try:
+            json_obj = json.loads(msg.value().decode('utf-8'))
+            database = json_obj['database']
+            with self.driver.session(database=database) as session:
+                session.write_transaction(self.create_node_tx, query) 
+                print("WROTE TO NEO4j")
+        except Exception as e:
+            logging.error("Error in Writing the data to Neo4j")
+            self.jobTracker.markPushingJob("Error in Writing the data to Neo4j")
+            c.commit(msg)
         q.task_done()
         c.commit(msg)
 
@@ -69,11 +78,14 @@ class Processor(object):
                     logging.error(
                         '#%s - Consumer error: %s', os.getpid(), msg.error()
                     )
+                    self.jobTracker.markPushingJob("Consumer Error %s", os.getpid())
                     continue
                 q.put(msg)
                 # Use default daemon=False to stop threads gracefully in order to
                 # release resources properly.
-                print('submitting to thread')
+                # print('submitting to thread')
+                logging.info("Submmitting to the Thread")
+                self.jobTracker.markPushingJob("Submitting to the Thread")
                 self.executor.submit(self._process_msg,q=q,c=c)
             except Exception:
                 logging.exception('#%s - Worker terminated.', os.getpid())
@@ -84,10 +96,10 @@ class Processor(object):
         print('Starting worker #%s', os.getpid())
         logging.info('Starting worker #%s', os.getpid())
         self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=10)
-        # uri = "neo4j://10.10.1.146:7687"
+        self.jobTracker = JobTracker()
         self.driver = GraphDatabase.driver(properties.NEO4J_SERVER_URL,auth=(properties.NEO4J_SERVER_USERNAME, properties.NEO4J_SERVER_PASSWORD))
         
-        Connect_DB("youtube")
+        # Connect_DB("youtube")
         
     def startConumsing(self,config):
         self._consume(config)
