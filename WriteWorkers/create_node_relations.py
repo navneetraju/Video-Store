@@ -11,9 +11,6 @@ logging.basicConfig(format='%(asctime)s %(message)s',level=properties.LOG_LEVEL)
 
 
 class Node_Relations:
-
-    def __init__(self):
-        print("Inside Create")
     
     def combine_check_data(self, json1, json2, param1, param2):
         """
@@ -59,7 +56,6 @@ class Node_Relations:
             param2 = json2['event']
         if(param2 == Constants.NEO4J_NODE_NAMES[Constants.SPATIAL]):
             param2 = json2['place']
-        # print("Check Combine Data ", param1, param2)
         res_string = ""
         for key in json1:
             res_string += param1 + "." + key + "=\'" + \
@@ -99,7 +95,6 @@ class Node_Relations:
             create_node_query = Constants.NEO4J_NODE_EXPERIENTIAL(json)
         if(node_name == Constants.NEO4J_NODE_NAMES[Constants.SPATIAL]):
             create_node_query = Constants.NEO4J_NODE_SPATIAL(json)
-        # print("Create Query", create_node_query)
         return create_node_query + "\n"
         
 
@@ -112,7 +107,6 @@ class Node_Relations:
         node_mapping1 : Constants.NEO4J_NODE_TYPE_MAPPING[Constants.INFORMATIONAL]
         node_mapping2 : Constants.NEO4J_NODE_TYPE_MAPPING[Constants.TEMPORAL]
         """
-        # print("Onw Way json ". json1, json2)
         if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.VIDEO]):
             if(json1['video_id'][0].isdigit()):
                 json1['video_id'] = json1['video_id'][1:]
@@ -152,8 +146,6 @@ class Node_Relations:
         if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.SPATIAL]):
             node_name2 = json2['place']
         
-        # print("One way relation ", node_name1, node_name2)
-        
         data_after_where = self.combine_check_data(json1, json2, node_name1, node_name2)
         relation_forward = "MERGE (" + node_name1+ ")-[:" + node_relation + "]->(" + node_name2 + ")\n"
         return  relation_forward
@@ -173,7 +165,6 @@ class Node_Relations:
         node_relation : Constants.NEO4J_RELATIONSHIP_IT
         
         """
-        # print("Two way json ", json1, json2)
         if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.VIDEO]):
             if(json1['video_id'][0].isdigit()):
                 json1['video_id'] = json1['video_id'][1:]
@@ -192,7 +183,6 @@ class Node_Relations:
             node_name1 = json1['event']
         if(node_name1 == Constants.NEO4J_NODE_NAMES[Constants.SPATIAL]):
             node_name1 = json1['place']
-        # print("Second Part")
         if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.VIDEO]):
             if(json2['video_id'][0].isdigit()):
                 json2['video_id'] = json2['video_id'][1:]
@@ -211,11 +201,7 @@ class Node_Relations:
             node_name2 = json2['event']
         if(node_name2 == Constants.NEO4J_NODE_NAMES[Constants.SPATIAL]):
             node_name2 = json2['place']
-
-        # print("two Way relation ", node_name1, node_name2)
         relation_forward = "MERGE (" + node_name1+ ")-[:" + node_relation + "]->(" + node_name2 + ")\n"  
         relation_backward = "MERGE (" + node_name2 + ")-[:" + node_relation + "]->(" + node_name1 + ")\n"
-        logging.info("Creating Two Way Relationships...")
-        
         return  relation_forward +  relation_backward
         

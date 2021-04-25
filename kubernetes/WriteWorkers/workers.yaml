@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metadata-worker-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metadata-worker-app
+  template:
+    metadata:
+      labels:
+        app: metadata-worker-app
+    spec:
+      containers:
+      - name: metadata-worker-app
+        image: navneetraju/metadata_store:write_worker
+        imagePullPolicy: Always
+        env:
+          - name: NUM_WORKERS
+            value: '5'
+          - name: NUM_WORKER_THREADS
+            value: '10'
+          - name: KAFKA_TOPIC
+            value: test_topic_perf
+          - name: KAFKA_BOOTSTRAP_SERVERS
+            value: '10.10.1.146:9092'
+          - name: KAFKA_CONSUMER_GROUP
+            value: my_consumer_group
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+      imagePullSecrets:
+        - name: regcred

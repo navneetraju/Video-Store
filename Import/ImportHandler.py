@@ -12,7 +12,7 @@ import logging
 logging.basicConfig(format='%(asctime)s %(message)s',level=properties.LOG_LEVEL)
 class ImportHandler:
     def __init__(self):
-        self.kafkaProducer = KafkaProducer('10.10.1.146:9092','test')
+        self.kafkaProducer = KafkaProducer('10.10.1.146:9092','test_topic_perf')
         self.jobTracker = JobTracker()
     def writeCSV(self,csvFile,database,dataset,jobID):
         logging.info("Recieved CSV job {}, starting parsing".format(jobID))

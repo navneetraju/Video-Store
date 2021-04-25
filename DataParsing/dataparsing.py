@@ -104,10 +104,10 @@ class DataParser:
             video_node = result['video']
             temporal_node = result['temporal']
             res['video_id'] = video_node['video_id']
-            res['video_url'] = self.youtubeAPI.getFinalYoutubeURL(video_node['video_url'],int(temporal_node['start_frame']))
+            res['video_url'] = self.youtubeAPI.getFinalYoutubeURL(video_node['video_url'],int(float(temporal_node['start_frame'])))
             res['video_location'] = video_node['Location']
-            res['start_frame'] = temporal_node['start_frame']
-            res['end_frame'] = temporal_node['end_frame']
+            res['start_frame'] = int(float(temporal_node['start_frame']))
+            res['end_frame'] = int(float(temporal_node['end_frame']))
             final_converted_list.append(res)
         result = dict()
         result['responseList'] = final_converted_list
@@ -123,10 +123,10 @@ class DataParser:
             video_node = result['video']
             temporal_node = result['temporal']
             res['video_id'] = video_node['video_id']
-            res['video_url'] = self.youtubeAPI.getFinalYoutubeURL(video_node['video_url'],int(temporal_node['start_frame']))
+            res['video_url'] = self.youtubeAPI.getFinalYoutubeURL(video_node['video_url'],int(float(temporal_node['start_frame'])))
             res['video_location'] = video_node['Location']
-            res['start_frame'] = temporal_node['start_frame']
-            res['end_frame'] = temporal_node['end_frame']
+            res['start_frame'] = int(float(temporal_node['start_frame']))
+            res['end_frame'] = int(float(temporal_node['end_frame']))
             res['score'] = result['score']
             if 'event' in result:
                 matched_tags.append(result['event']['event'])
