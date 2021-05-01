@@ -17,6 +17,9 @@ import Grid from '@material-ui/core/Grid';
 import QueryEditor from './QueryEditor';
 import SimpleQuery from './SimpleQuery';
 import FuzzyQuery from './FuzzyQuery';
+import YoutubeEmbed from './YoutubeEmbed';
+//import Recommendations from './Recommendations';
+//import RecommendCard from './RecommendCard';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -110,140 +113,261 @@ function reloadPage() {
     console.log("Refreshed"); 
 }
 class QueryDashboard extends React.Component {
-	state = {
-		open: false,
-		response: null,
-		error: null,
-		loading: false,
-		isFuzzy: false,
-	  };
-	
-	constructor(props){
-		super(props);
-		this.handler = this.handler.bind(this);
-		this.changePage = this.changePage.bind(this);
-		this.loadingHandler = this.loadingHandler.bind(this);
-	}
-	componentDidMount(){
-		reloadPage();
-	}
 
-	changePage(something,event){
-		this.props.pageHandler(something);
-	}
-	handler(resp,err,isFuzzyB) {
-		console.log('Response,err ',resp,err);
-		this.setState({ response: resp ,error:err, isFuzzy:isFuzzyB});
-	}
+  state = {
+    open: false,
+    response: null,
+    error: null,
+    loading: false,
+    isFuzzy: false,
+    videoid: null,
+    start_frame: null,
+    end_frame: null,
+  };
 
-	loadingHandler(loadingBool){
-		this.setState({loading: loadingBool })
-	}
+  constructor(props) {
+    super(props);
+    this.handler = this.handler.bind(this);
+    this.changePage = this.changePage.bind(this);
+    this.loadingHandler = this.loadingHandler.bind(this);
+    this.videoHandler = this.videoHandler.bind(this);
+  }
+
+  componentDidMount() {
+    reloadPage();
+  }
+
+  changePage(something, event) {
+    this.props.pageHandler(something);
+  }
+
+  handler(resp, err, isFuzzyB) {
+    console.log('Response,err ', resp, err);
+    this.setState({response: resp, error: err, isFuzzy: isFuzzyB});
+  }
+
+  loadingHandler(loadingBool) {
+    this.setState({loading: loadingBool})
+  }
+
+  async videoHandler(id, start, end) {
+    //this.setState({videoid: videoid, start_frame: start_frame, end_frame: end_frame});
+    //this.props.recommendations(videoid, start_frame, end_frame);
+    this.setState({videoid: id})
+    var db_name = 'testing';
+    const requestOptions = {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+      //body: JSON.stringify(requestBody)
+    }
+    //console.log(id);
+    //console.log('start');
+    const res = await fetch('http://127.0.0.1:8000/api/recommend/' + id + '/' + db_name + '/?start=' + String(start) + '&end=' + String(end), requestOptions)
+    //const res = await fetch('http://10.10.1.146:8000/api/recommend/' + id + '/' + db_name + '/?start=' + String(start) + '&end=' + String(end), requestOptions)
+    
+    //console.log(res);
+    const data = await res.json();
+    this.setState({recommendationResponse: data, responseType: 'recommendationResponse'})
+    console.log(this.state.recommendationResponse);
+
+  }
 
   handleDrawerOpen = () => {
-    this.setState({ open: true });
+    this.setState({open: true});
   };
 
   handleDrawerClose = () => {
-    this.setState({ open: false });
+    this.setState({open: false});
   };
 
   render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar
-          position="absolute"
-          className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
-        >
-          <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerOpen}
-              className={classNames(
-                classes.menuButton,
-                this.state.open && classes.menuButtonHidden,
-              )}
+    const {classes} = this.props;
+
+    if (this.state.responseType === 'recommendationResponse') {
+      return (
+          <div className={classes.root}>
+            <CssBaseline/>
+            <AppBar
+                position="absolute"
+                className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
             >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              className={classes.title}
+              <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
+                <IconButton
+                    color="inherit"
+                    aria-label="Open drawer"
+                    onClick={this.handleDrawerOpen}
+                    className={classNames(
+                        classes.menuButton,
+                        this.state.open && classes.menuButtonHidden,
+                    )}
+                >
+                  <MenuIcon/>
+                </IconButton>
+                <Typography
+                    component="h1"
+                    variant="h6"
+                    color="inherit"
+                    noWrap
+                    className={classes.title}
+                >
+                  Dashboard
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <Drawer
+                variant="permanent"
+                classes={{
+                  paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+                }}
+                open={this.state.open}
             >
-              Dashboard
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
-          }}
-          open={this.state.open}
-        >
-          <div className={classes.toolbarIcon}>
-            <IconButton onClick={this.handleDrawerClose}>
-              <ChevronLeftIcon />
-            </IconButton>
+              <div className={classes.toolbarIcon}>
+                <IconButton onClick={this.handleDrawerClose}>
+                  <ChevronLeftIcon/>
+                </IconButton>
+              </div>
+              <Divider/>
+              <List>
+                <div>
+                  <ListItem button onClick={(event) => this.changePage("DASHBOARD", event)}>
+                    <ListItemIcon>
+                      <DashboardIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Dashboard"/>
+                  </ListItem>
+                  <ListItem button onClick={(event) => this.changePage("GRAPH", event)}>
+                    <ListItemIcon>
+                      <BubbleChart/>
+                    </ListItemIcon>
+                    <ListItemText primary="Graph Visualizer"/>
+                  </ListItem>
+                  <ListItem button onClick={(event) => this.changePage("IMPORTER", event)}>
+                    <ListItemIcon>
+                      <Storage/>
+                    </ListItemIcon>
+                    <ListItemText primary="Database Importer"/>
+                  </ListItem>
+                </div>
+              </List>
+            </Drawer>
+            <main className={classes.content}>
+            <div className={classes.appBarSpacer}/>
+              <div>
+                <YoutubeEmbed videoid={this.state.videoid}/>
+              </div>
+              <br />
+              <br />
+              <Typography variant="h5" gutterBottom component="h2">
+                Recommended Videos
+              </Typography>
+              <div className={classes.tableContainer}>
+
+                <SimpleTable response={this.state.recommendationResponse} error={this.state.error} isLoading={this.state.loading}
+                            isRec={true} isFuzzy={false} videoHandler={this.videoHandler}/>
+              </div>
+            </main>
           </div>
-          <Divider />
-<List>  <div>
-    <ListItem button onClick={(event) => this.changePage("DASHBOARD", event)}>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItem>
-    <ListItem button onClick={(event) => this.changePage("GRAPH", event)}>
-      <ListItemIcon >
-        <BubbleChart />
-      </ListItemIcon>
-      <ListItemText primary="Graph Visualizer"/>
-    </ListItem>
-    <ListItem button onClick={(event) => this.changePage("IMPORTER", event)}>
-      <ListItemIcon>
-        <Storage />
-      </ListItemIcon>
-      <ListItemText primary="Database Importer"/>
-    </ListItem>
-  </div></List>
-        </Drawer>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          <Typography variant="h5" gutterBottom component="h2">
-		  	Query Editor
-          </Typography>
-		  <Grid container spacing={3}>
-          <QueryEditor/>
-        <Grid item xs={3} >
-		  <SimpleQuery handler = {this.handler} loadingHandler = {this.loadingHandler}/>
-        </Grid>
-		<Grid item xs={3}>
-		  <FuzzyQuery handler = {this.handler} loadingHandler = {this.loadingHandler}/>
-        </Grid>
-      </Grid>
-		  <br/>
-		  <br/>
-          <Typography variant="h5" gutterBottom component="h2">
-            Results
-          </Typography>
-          <div className={classes.tableContainer}>
-            <SimpleTable response = {this.state.response} error={this.state.error} isLoading={this.state.loading} isFuzzy={this.state.isFuzzy}/>
+      );
+    } else {
+      return (
+          <div className={classes.root}>
+            <CssBaseline/>
+            <AppBar
+                position="absolute"
+                className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
+            >
+              <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
+                <IconButton
+                    color="inherit"
+                    aria-label="Open drawer"
+                    onClick={this.handleDrawerOpen}
+                    className={classNames(
+                        classes.menuButton,
+                        this.state.open && classes.menuButtonHidden,
+                    )}
+                >
+                  <MenuIcon/>
+                </IconButton>
+                <Typography
+                    component="h1"
+                    variant="h6"
+                    color="inherit"
+                    noWrap
+                    className={classes.title}
+                >
+                  Dashboard
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <Drawer
+                variant="permanent"
+                classes={{
+                  paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+                }}
+                open={this.state.open}
+            >
+              <div className={classes.toolbarIcon}>
+                <IconButton onClick={this.handleDrawerClose}>
+                  <ChevronLeftIcon/>
+                </IconButton>
+              </div>
+              <Divider/>
+              <List>
+                <div>
+                  <ListItem button onClick={(event) => this.changePage("DASHBOARD", event)}>
+                    <ListItemIcon>
+                      <DashboardIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Dashboard"/>
+                  </ListItem>
+                  <ListItem button onClick={(event) => this.changePage("GRAPH", event)}>
+                    <ListItemIcon>
+                      <BubbleChart/>
+                    </ListItemIcon>
+                    <ListItemText primary="Graph Visualizer"/>
+                  </ListItem>
+                  <ListItem button onClick={(event) => this.changePage("IMPORTER", event)}>
+                    <ListItemIcon>
+                      <Storage/>
+                    </ListItemIcon>
+                    <ListItemText primary="Database Importer"/>
+                  </ListItem>
+                </div>
+              </List>
+            </Drawer>
+            <main className={classes.content}>
+              <div className={classes.appBarSpacer}/>
+              <Typography variant="h5" gutterBottom component="h2">
+                Query Editor
+              </Typography>
+              <Grid container spacing={3}>
+                <QueryEditor/>
+                <Grid item xs={3}>
+                  <SimpleQuery handler={this.handler} loadingHandler={this.loadingHandler}/>
+                </Grid>
+                <Grid item xs={3}>
+                  <FuzzyQuery handler={this.handler} loadingHandler={this.loadingHandler}/>
+                </Grid>
+              </Grid>
+              <br/>
+              <br/>
+              <Typography variant="h5" gutterBottom component="h2">
+                Results
+              </Typography>
+              <div className={classes.tableContainer}>
+                <SimpleTable response={this.state.response} error={this.state.error} isLoading={this.state.loading}
+                             isFuzzy={this.state.isFuzzy} videoHandler={this.videoHandler}/>
+              </div>
+            </main>
           </div>
-        </main>
-      </div>
-    );
+      );
+    }
   }
 }
 
+
 QueryDashboard.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(QueryDashboard);

@@ -2,6 +2,8 @@ import React from 'react';
 import QueryDashboard from './QueryDashboard';
 import GraphVisualizer from './GraphVisualizer';
 import DataImporter from './DataImporter';
+//import YoutubeEmbed from './YoutubeEmbed';
+//import Recommendations from './Recommendations';
 
 
 class Dashboard extends React.Component {
@@ -15,6 +17,7 @@ class Dashboard extends React.Component {
 		super(props);
 		this.handler = this.handler.bind(this);
 		this.pageHandler = this.pageHandler.bind(this);
+		
 	}
 
 	
@@ -26,6 +29,7 @@ class Dashboard extends React.Component {
 	pageHandler(nextpage) {
 		this.setState({page: nextpage});
 	}
+	
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -45,9 +49,10 @@ class Dashboard extends React.Component {
 	else if(nextPage === "GRAPH"){
 		return(<GraphVisualizer pageHandler = {this.pageHandler}/>);
 	}
-	else{
-		return(<DataImporter pageHandler ={this.pageHandler}/>)
+	else {
+		return(<DataImporter pageHandler = {this.pageHandler}/>)
 	}
+	
   }
 }
 
