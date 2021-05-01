@@ -34,7 +34,7 @@ def NEO4J_SIMPLE_EVENT(event):
 
 
 def NEO4J_SIMPLE_INFORMATION(information):
-    return "(:Infromational{information:" + "\'{}\'".format(
+    return "(:Informational{information:" + "\'{}\'".format(
         information) + "})-[:PRESENT]->(temporal:Temporal)-[:IS_PART_OF]->(video:Video)"
 
 
@@ -114,7 +114,7 @@ NEO4J_NODE_TYPE_MAPPING = {
     SPATIAL: "(spatial:Spatial)",
     TEMPORAL: "(temporal:Temporal)",
     CAUSALITY: "(cause:Causality)",
-    INFORMATIONAL: "(info:Infromational)",
+    INFORMATIONAL: "(info:Informational)",
     VIDEO: "(video:Video)"
 }
 
