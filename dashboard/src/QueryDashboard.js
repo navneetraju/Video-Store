@@ -123,6 +123,7 @@ class QueryDashboard extends React.Component {
     videoid: null,
     start_frame: null,
     end_frame: null,
+	responseType: "none"
   };
 
   constructor(props) {
@@ -138,7 +139,13 @@ class QueryDashboard extends React.Component {
   }
 
   changePage(something, event) {
-    this.props.pageHandler(something);
+	  console.log("Inside changePage callback");
+
+	  if(something === "DASHBOARD"){
+		window.location.reload();
+	  }else{
+		this.props.pageHandler(something);
+	  }
   }
 
   handler(resp, err, isFuzzyB) {
@@ -154,7 +161,7 @@ class QueryDashboard extends React.Component {
     //this.setState({videoid: videoid, start_frame: start_frame, end_frame: end_frame});
     //this.props.recommendations(videoid, start_frame, end_frame);
     this.setState({videoid: id})
-    var db_name = 'testing';
+    var db_name = 'youtube';
     const requestOptions = {
       method: 'GET',
       headers: {'Content-Type': 'application/json'},
@@ -162,12 +169,12 @@ class QueryDashboard extends React.Component {
     }
     //console.log(id);
     //console.log('start');
-    const res = await fetch('http://127.0.0.1:8000/api/recommend/' + id + '/' + db_name + '/?start=' + String(start) + '&end=' + String(end), requestOptions)
+    const res = await fetch('http://10.10.1.146:8000/api/recommend/' + id + '/' + db_name + '/?start=' + String(start) + '&end=' + String(end), requestOptions)
     //const res = await fetch('http://10.10.1.146:8000/api/recommend/' + id + '/' + db_name + '/?start=' + String(start) + '&end=' + String(end), requestOptions)
     
     //console.log(res);
     const data = await res.json();
-    this.setState({recommendationResponse: data, responseType: 'recommendationResponse'})
+    this.setState({recommendationResponse: data, responseType: 'recommendationResponse', start_frame: start})
     console.log(this.state.recommendationResponse);
 
   }
@@ -253,11 +260,8 @@ class QueryDashboard extends React.Component {
             <main className={classes.content}>
             <div className={classes.appBarSpacer}/>
               <div>
-                <YoutubeEmbed videoid={this.state.videoid}/>
-              </div>
-              <br />
-              <br />
-              <Typography variant="h5" gutterBottom component="h2">
+                <YoutubeEmbed videoid={this.state.videoid} start={this.state.start_frame}/>
+				<Typography variant="h5" gutterBottom component="h2">
                 Recommended Videos
               </Typography>
               <div className={classes.tableContainer}>
@@ -265,10 +269,15 @@ class QueryDashboard extends React.Component {
                 <SimpleTable response={this.state.recommendationResponse} error={this.state.error} isLoading={this.state.loading}
                             isRec={true} isFuzzy={false} videoHandler={this.videoHandler}/>
               </div>
+              </div>
+              <br />
+              <br />
             </main>
           </div>
       );
     } else {
+
+
       return (
           <div className={classes.root}>
             <CssBaseline/>
